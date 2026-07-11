@@ -43,13 +43,13 @@ export function FaqSection() {
     <section id="faq" className="py-24 relative">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-3">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-3 shadow-sm">
             <HelpCircle className="w-3.5 h-3.5" /> FAQ
           </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-foreground tracking-tight">
-            Pertanyaan yang Sering <span className="gradient-text">Diajukan</span>
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-foreground tracking-tight mb-4">
+            Pertanyaan yang Sering <span className="text-primary font-black">Diajukan</span>
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-muted-foreground">
+          <p className="text-base sm:text-lg text-muted-foreground font-medium">
             Temukan jawaban lengkap tentang cara kerja, keamanan materi, dan kecanggihan AI Arnai.
           </p>
         </div>
@@ -61,7 +61,7 @@ export function FaqSection() {
               <div
                 key={faq.question}
                 className={`glass-card rounded-2xl border transition-all duration-300 overflow-hidden ${
-                  isOpen ? "border-primary/50 bg-secondary/30" : "border-border/80 hover:border-border"
+                  isOpen ? "border-primary/50 bg-secondary/60" : "border-border hover:border-primary/30"
                 }`}
               >
                 <button
@@ -88,7 +88,7 @@ export function FaqSection() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                     >
-                      <div className="px-6 pb-6 pt-1 text-sm sm:text-base text-muted-foreground leading-relaxed border-t border-border/40">
+                      <div className="px-6 pb-6 pt-1 text-sm sm:text-base text-muted-foreground font-medium leading-relaxed border-t border-border">
                         {faq.answer}
                       </div>
                     </motion.div>
@@ -100,19 +100,19 @@ export function FaqSection() {
         </div>
 
         {/* Support Banner */}
-        <div className="mt-16 p-8 rounded-2xl glass-card text-center flex flex-col sm:flex-row items-center justify-between gap-6 border border-indigo-500/30">
+        <div className="mt-16 p-8 rounded-2xl glass-card text-center flex flex-col sm:flex-row items-center justify-between gap-6 border border-primary/30 shadow-md">
           <div className="flex items-center gap-4 text-left">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-primary-foreground shrink-0 shadow-sm">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
               <h3 className="font-bold text-foreground text-lg">Masih punya pertanyaan lainnya?</h3>
-              <p className="text-sm text-muted-foreground">Tim dukungan kami siap membantu Anda 24/7.</p>
+              <p className="text-sm text-muted-foreground font-medium">Tim dukungan kami siap membantu Anda 24/7.</p>
             </div>
           </div>
           <a
             href="mailto:support@arnai.ai"
-            className="px-6 py-3 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-sm transition-colors whitespace-nowrap shadow-md shadow-indigo-500/20"
+            className="px-6 py-3 rounded-xl bg-primary hover:bg-blue-700 dark:hover:bg-blue-600 text-primary-foreground font-bold text-sm transition-colors whitespace-nowrap shadow-sm"
           >
             Hubungi Support
           </a>
@@ -121,3 +121,4 @@ export function FaqSection() {
     </section>
   );
 }
+

@@ -2,18 +2,25 @@
 
 import React from "react";
 import Link from "next/link";
-import { Sparkles, Heart } from "lucide-react";
+import Image from "next/image";
+import { Heart } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-card/40 pt-16 pb-12 mt-24">
+    <footer className="border-t border-border bg-card/60 pt-16 pb-12 mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-10 pb-12 border-b border-border">
           {/* Brand & Bio */}
           <div className="md:col-span-2 flex flex-col gap-4">
-            <Link href="/" className="flex items-center gap-2 group w-fit">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-white" />
+            <Link href="/" className="flex items-center gap-3 group w-fit">
+              <div className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center p-1.5 shadow-sm">
+                <Image
+                  src="/logo.png"
+                  alt="Arnai Logo"
+                  width={32}
+                  height={32}
+                  className="w-full h-full object-contain"
+                />
               </div>
               <span className="font-extrabold text-xl tracking-tight text-foreground">
                 Arnai<span className="text-primary font-bold">.ai</span>
@@ -27,7 +34,7 @@ export function Footer() {
                 href="https://github.com/arkhabw/Arnai"
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-lg border border-border bg-card flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
+                className="w-9 h-9 rounded-lg border border-border bg-card flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors shadow-sm"
                 aria-label="GitHub"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -38,7 +45,7 @@ export function Footer() {
                 href="https://twitter.com"
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-lg border border-border bg-card flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
+                className="w-9 h-9 rounded-lg border border-border bg-card flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors shadow-sm"
                 aria-label="Twitter"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -49,7 +56,7 @@ export function Footer() {
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-lg border border-border bg-card flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors"
+                className="w-9 h-9 rounded-lg border border-border bg-card flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/50 transition-colors shadow-sm"
                 aria-label="LinkedIn"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -61,10 +68,10 @@ export function Footer() {
 
           {/* Links 1 */}
           <div>
-            <h4 className="font-semibold text-foreground text-sm tracking-wide uppercase mb-4">
+            <h4 className="font-bold text-foreground text-sm tracking-wide uppercase mb-4">
               Fitur Utama
             </h4>
-            <ul className="space-y-2.5 text-sm text-muted-foreground font-medium">
+            <ul className="space-y-2.5 text-sm text-muted-foreground font-semibold">
               <li><Link href="#features" className="hover:text-primary transition-colors">AI Chat (RAG)</Link></li>
               <li><Link href="#features" className="hover:text-primary transition-colors">Flashcard 3D SRS</Link></li>
               <li><Link href="#features" className="hover:text-primary transition-colors">Quiz Generator</Link></li>
@@ -75,10 +82,10 @@ export function Footer() {
 
           {/* Links 2 */}
           <div>
-            <h4 className="font-semibold text-foreground text-sm tracking-wide uppercase mb-4">
+            <h4 className="font-bold text-foreground text-sm tracking-wide uppercase mb-4">
               Eksplorasi
             </h4>
-            <ul className="space-y-2.5 text-sm text-muted-foreground font-medium">
+            <ul className="space-y-2.5 text-sm text-muted-foreground font-semibold">
               <li><Link href="#how-it-works" className="hover:text-primary transition-colors">Cara Kerja</Link></li>
               <li><Link href="/dashboard" className="hover:text-primary transition-colors">Preview Dashboard</Link></li>
               <li><Link href="/study/pomodoro" className="hover:text-primary transition-colors">Pomodoro Timer</Link></li>
@@ -88,10 +95,10 @@ export function Footer() {
 
           {/* Links 3 */}
           <div>
-            <h4 className="font-semibold text-foreground text-sm tracking-wide uppercase mb-4">
+            <h4 className="font-bold text-foreground text-sm tracking-wide uppercase mb-4">
               Legal & Keamanan
             </h4>
-            <ul className="space-y-2.5 text-sm text-muted-foreground font-medium">
+            <ul className="space-y-2.5 text-sm text-muted-foreground font-semibold">
               <li><a href="#" className="hover:text-primary transition-colors">Kebijakan Privasi</a></li>
               <li><a href="#" className="hover:text-primary transition-colors">Syarat & Ketentuan</a></li>
               <li><a href="#" className="hover:text-primary transition-colors">Keamanan Vector DB</a></li>
@@ -100,14 +107,15 @@ export function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-muted-foreground gap-4">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-muted-foreground gap-4 font-medium">
           <p>© {new Date().getFullYear()} Arnai.ai — Learn easier with AI. All rights reserved.</p>
           <p className="flex items-center gap-1">
-            Dibuat dengan <Heart className="w-3.5 h-3.5 text-pink-500 fill-pink-500" /> untuk revolusi pendidikan Indonesia.
+            Dibuat dengan <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" /> untuk revolusi pendidikan Indonesia.
           </p>
         </div>
       </div>
     </footer>
   );
 }
+
 
