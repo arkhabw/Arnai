@@ -2,6 +2,8 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { db, isFirebaseConfigured } from "./firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export interface UserProfile {
   id: string;
@@ -14,6 +16,8 @@ export interface UserProfile {
   streakDays: number;
   completedQuizzes: number;
   masteredFlashcards: number;
+  xp: number;
+  level: number;
 }
 
 interface AuthContextType {
@@ -22,6 +26,7 @@ interface AuthContextType {
   login: (email: string, password?: string) => Promise<boolean>;
   register: (name: string, email: string, password?: string) => Promise<boolean>;
   loginWithGoogle: (accessToken: string) => Promise<boolean>;
+  updateUserStats: (stats: Partial<UserProfile>) => Promise<void>;
   logout: () => void;
 }
 
@@ -37,9 +42,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const stored = localStorage.getItem("arnai_current_user");
       if (stored) {
-        setUser(JSON.parse(stored));
+        const parsedUser = JSON.parse(stored);
+        setUser(parsedUser);
+        
+        // Asynchronously pull latest updates from Firestore if online
+        if (isFirebaseConfigured && db && parsedUser.email) {
+          const docId = parsedUser.email.replace(/\./g, "_");
+          getDoc(doc(db, "users", docId)).then((docSnap) => {
+            if (docSnap.exists()) {
+              const latestData = docSnap.data() as UserProfile;
+              setUser(latestData);
+              localStorage.setItem("arnai_current_user", JSON.stringify(latestData));
+            }
+          }).catch(err => console.error("Error fetching latest user stats:", err));
+        }
       } else {
-        // Default to null, user can login or click Quick Demo
         setUser(null);
       }
     } catch (e) {
@@ -62,9 +79,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const syncUserFirestore = async (profile: UserProfile): Promise<UserProfile> => {
+    if (!isFirebaseConfigured || !db) return profile;
+    try {
+      const docId = profile.email.replace(/\./g, "_");
+      const docRef = doc(db, "users", docId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const firestoreData = docSnap.data();
+        const mergedProfile = {
+          ...profile,
+          name: firestoreData.name || profile.name,
+          avatar: firestoreData.avatar || profile.avatar,
+          streakDays: typeof firestoreData.streakDays === "number" ? firestoreData.streakDays : profile.streakDays,
+          completedQuizzes: typeof firestoreData.completedQuizzes === "number" ? firestoreData.completedQuizzes : profile.completedQuizzes,
+          masteredFlashcards: typeof firestoreData.masteredFlashcards === "number" ? firestoreData.masteredFlashcards : profile.masteredFlashcards,
+          xp: typeof firestoreData.xp === "number" ? firestoreData.xp : profile.xp,
+          level: typeof firestoreData.level === "number" ? firestoreData.level : profile.level,
+        };
+        // Update to make sure any missing properties are saved back
+        await setDoc(docRef, mergedProfile, { merge: true });
+        return mergedProfile as UserProfile;
+      } else {
+        await setDoc(docRef, profile);
+        return profile;
+      }
+    } catch (err) {
+      console.error("Firestore sync error:", err);
+      return profile;
+    }
+  };
+
   const login = async (email: string, _password?: string): Promise<boolean> => {
     setIsLoading(true);
-    // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 800));
 
     const loggedInUser: UserProfile = {
@@ -78,9 +125,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       streakDays: 1,
       completedQuizzes: 0,
       masteredFlashcards: 0,
+      xp: 100, // Starting bonus XP
+      level: 1,
     };
 
-    persistUser(loggedInUser);
+    const syncedUser = await syncUserFirestore(loggedInUser);
+    persistUser(syncedUser);
     setIsLoading(false);
     return true;
   };
@@ -100,9 +150,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       streakDays: 1,
       completedQuizzes: 0,
       masteredFlashcards: 0,
+      xp: 100,
+      level: 1,
     };
 
-    persistUser(newUser);
+    const syncedUser = await syncUserFirestore(newUser);
+    persistUser(syncedUser);
     setIsLoading(false);
     return true;
   };
@@ -127,14 +180,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         streakDays: 1,
         completedQuizzes: 0,
         masteredFlashcards: 0,
+        xp: 100,
+        level: 1,
       };
 
-      persistUser(loggedInUser);
+      const syncedUser = await syncUserFirestore(loggedInUser);
+      persistUser(syncedUser);
       setIsLoading(false);
       return true;
     } catch (e) {
       setIsLoading(false);
       throw e;
+    }
+  };
+
+  const updateUserStats = async (stats: Partial<UserProfile>) => {
+    if (!user) return;
+    const updatedUser = { ...user, ...stats };
+
+    // Calculate level based on XP (500 XP per level)
+    if (typeof updatedUser.xp === "number") {
+      updatedUser.level = Math.max(1, Math.floor(updatedUser.xp / 500) + 1);
+    }
+
+    persistUser(updatedUser);
+
+    if (isFirebaseConfigured && db && user.email) {
+      try {
+        const docId = user.email.replace(/\./g, "_");
+        await setDoc(doc(db, "users", docId), updatedUser, { merge: true });
+      } catch (err) {
+        console.error("Gagal menyinkronkan progres ke Firestore:", err);
+      }
     }
   };
 
@@ -151,6 +228,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         register,
         loginWithGoogle,
+        updateUserStats,
         logout,
       }}
     >

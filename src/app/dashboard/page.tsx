@@ -120,6 +120,8 @@ export default function DashboardPage() {
     streakDays: 0,
     completedQuizzes: 0,
     masteredFlashcards: 0,
+    xp: 100,
+    level: 1,
   };
 
   return (
@@ -217,6 +219,20 @@ export default function DashboardPage() {
               <h1 className="text-2xl sm:text-4xl font-black tracking-tight mb-2">
                 Halo, <span className="text-primary">{currentUser.name}</span> 👋
               </h1>
+              <div className="flex items-center gap-3.5 mb-4 mt-2">
+                <span className="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white font-extrabold text-[10px] tracking-wider uppercase shrink-0 shadow-sm">
+                  ✨ Level {currentUser.level || 1}
+                </span>
+                <div className="w-48 h-2 rounded-full bg-secondary border border-border overflow-hidden relative">
+                  <div
+                    className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-500"
+                    style={{ width: `${Math.min(100, ((currentUser.xp || 100) % 500) / 5)}%` }}
+                  />
+                </div>
+                <span className="text-xs font-black text-foreground shrink-0">
+                  {currentUser.xp || 100} XP
+                </span>
+              </div>
               <p className="text-xs sm:text-sm text-muted-foreground font-medium leading-relaxed">
                 {currentUser.provider === "google" ? (
                   <span>

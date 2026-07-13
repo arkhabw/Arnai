@@ -223,7 +223,7 @@ const initialQuizDecks: Record<string, QuizDeck> = {
 };
 
 function QuizzesContent() {
-  const { user, logout } = useAuth();
+  const { user, logout, updateUserStats } = useAuth();
   const searchParams = useSearchParams();
   const deckParam = searchParams.get("deck") || "ml_uts";
 
@@ -249,6 +249,8 @@ function QuizzesContent() {
     role: "Guest Account",
     isDemo: true,
     provider: "demo" as const,
+    xp: 100,
+    level: 1,
   };
 
   const currentDeck = initialQuizDecks[activeDeckKey];
@@ -298,6 +300,18 @@ function QuizzesContent() {
   const handleSubmitExam = () => {
     setSubmitted(true);
     if (timerRef.current) clearInterval(timerRef.current);
+    
+    // Calculate total earned score
+    const scoreData = calculateTotalScore();
+    const earnedXp = scoreData.earned;
+
+    if (user) {
+      updateUserStats({
+        xp: (user.xp || 100) + earnedXp,
+        completedQuizzes: (user.completedQuizzes || 0) + 1
+      });
+    }
+
     confetti({
       particleCount: 120,
       spread: 80,

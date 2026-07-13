@@ -108,6 +108,8 @@ function AchievementsContent() {
     role: "Guest Account",
     isDemo: true,
     provider: "demo" as const,
+    xp: 100,
+    level: 1,
   };
 
   const handleCelebrate = () => {
@@ -124,7 +126,7 @@ function AchievementsContent() {
     return true;
   });
 
-  const totalXP = 1450;
+  const totalXP = currentUser.xp || 100;
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -221,14 +223,17 @@ function AchievementsContent() {
 
             <div className="w-full md:w-80 space-y-2">
               <div className="flex justify-between text-xs font-black">
-                <span>Progres ke Level 5 (Grand Tactician)</span>
-                <span className="text-primary">85%</span>
+                <span>Progres ke Level {currentUser.level + 1}</span>
+                <span className="text-primary">{Math.round((totalXP % 500) / 5)}%</span>
               </div>
               <div className="w-full h-3 bg-secondary rounded-full overflow-hidden border border-border">
-                <div className="w-[85%] h-full bg-gradient-to-r from-primary to-blue-400 rounded-full" />
+                <div 
+                  className="h-full bg-gradient-to-r from-primary to-blue-400 rounded-full transition-all duration-500" 
+                  style={{ width: `${(totalXP % 500) / 5}%` }}
+                />
               </div>
               <div className="text-[11px] font-semibold text-muted-foreground text-right">
-                Sisa 150 XP lagi untuk naik level berikutnya
+                Sisa {500 - (totalXP % 500)} XP lagi untuk naik level berikutnya
               </div>
             </div>
           </div>

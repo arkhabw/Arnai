@@ -135,7 +135,7 @@ const initialDecks: Record<string, { title: string; subtitle: string; cards: Fla
 };
 
 function FlashcardsContent() {
-  const { user, logout } = useAuth();
+  const { user, logout, updateUserStats } = useAuth();
   const searchParams = useSearchParams();
   const deckParam = searchParams.get("deck") || "ml_bab2";
 
@@ -164,6 +164,8 @@ function FlashcardsContent() {
     role: "Guest Account",
     isDemo: true,
     provider: "demo" as const,
+    xp: 100,
+    level: 1,
   };
 
   const currentCard = cards[currentIndex];
@@ -211,6 +213,14 @@ function FlashcardsContent() {
       [rating]: prev[rating] + 1,
       streak: rating === "easy" || rating === "medium" ? prev.streak + 1 : 0,
     }));
+
+    // Award XP dynamically if user rates card as easy (Mastered)
+    if (rating === "easy" && user) {
+      updateUserStats({
+        xp: (user.xp || 100) + 15,
+        masteredFlashcards: (user.masteredFlashcards || 0) + 1
+      });
+    }
 
     // Update current card srsLevel
     setCards((prev) =>
