@@ -116,12 +116,12 @@ export default function DashboardPage() {
     email: "tamu@arnai.ai",
     avatar: "",
     role: "Guest Account",
-    isDemo: false,
-    streakDays: 0,
-    completedQuizzes: 0,
-    masteredFlashcards: 0,
-    xp: 100,
-    level: 1,
+    isDemo: true,
+    streakDays: 7,
+    completedQuizzes: 14,
+    masteredFlashcards: 68,
+    xp: 1450,
+    level: 3,
   };
 
   return (
@@ -280,7 +280,7 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <div className="text-xl sm:text-2xl font-black text-foreground">
-                    {currentUser.streakDays || 7} <span className="text-xs font-bold text-muted-foreground">Hari</span>
+                    {currentUser.streakDays} <span className="text-xs font-bold text-muted-foreground">Hari</span>
                   </div>
                   <div className="text-[11px] font-bold text-muted-foreground">Belajar Streak</div>
                 </div>
@@ -292,7 +292,7 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <div className="text-xl sm:text-2xl font-black text-foreground">
-                    {currentUser.completedQuizzes || 14}
+                    {currentUser.completedQuizzes}
                   </div>
                   <div className="text-[11px] font-bold text-muted-foreground">Kuis Diselesaikan</div>
                 </div>
@@ -304,7 +304,7 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <div className="text-xl sm:text-2xl font-black text-foreground">
-                    {currentUser.masteredFlashcards || 68} <span className="text-xs font-bold text-muted-foreground">Kartu</span>
+                    {currentUser.masteredFlashcards} <span className="text-xs font-bold text-muted-foreground">Kartu</span>
                   </div>
                   <div className="text-[11px] font-bold text-muted-foreground">Flashcard Dikuasai (SRS)</div>
                 </div>
