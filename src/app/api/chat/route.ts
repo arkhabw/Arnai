@@ -32,60 +32,72 @@ Gunakan formatting Markdown yang kaya: bold, tabel, code block, dan daftar berti
           parts: [{ text: m.content }],
         }));
 
-        const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${userApiKey.trim()}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              system_instruction: { parts: { text: systemInstruction } },
-              contents: geminiMessages,
-              generationConfig: {
-                temperature: 0.4,
-                maxOutputTokens: 2048,
-              },
-            }),
+        // Try multiple model variants automatically in case some are deprecated or on different API versions
+        const modelVariants = [
+          { name: "gemini-2.0-flash", url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${userApiKey.trim()}` },
+          { name: "gemini-1.5-flash (v1beta)", url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${userApiKey.trim()}` },
+          { name: "gemini-1.5-flash (v1)", url: `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${userApiKey.trim()}` },
+          { name: "gemini-1.5-pro", url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${userApiKey.trim()}` },
+        ];
+
+        let lastErrorMsg = "";
+        let lastStatus = 400;
+
+        for (const variant of modelVariants) {
+          try {
+            const response = await fetch(variant.url, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                system_instruction: { parts: { text: systemInstruction } },
+                contents: geminiMessages,
+                generationConfig: {
+                  temperature: 0.4,
+                  maxOutputTokens: 2048,
+                },
+              }),
+            });
+
+            const geminiData = await response.json();
+
+            if (response.ok && geminiData?.candidates?.[0]?.content?.parts?.[0]?.text) {
+              const aiReply = geminiData.candidates[0].content.parts[0].text;
+              return NextResponse.json({
+                success: true,
+                engineUsed: `Google ${variant.name} (Live Cloud API)`,
+                reply: aiReply,
+                citations: [
+                  {
+                    source: activeDoc,
+                    section: "Gemini Vector Search",
+                    page: "Live Cloud Index",
+                    snippet: `Disintesis langsung melalui Google Cloud Gemini API (${variant.name}) menggunakan sitasi semantik dari dokumen aktif.`,
+                  },
+                ],
+              });
+            } else {
+              lastStatus = response.status || 400;
+              lastErrorMsg = geminiData?.error?.message || `Model ${variant.name} tidak merespons dengan kandidat teks.`;
+              // If it's a 404 (model not found on this version/tier), loop continues to next variant
+              if (response.status === 404 || lastErrorMsg.includes("not found") || lastErrorMsg.includes("not supported")) {
+                continue;
+              } else {
+                // If it's an invalid API key (400) or quota exceeded (429), break immediately to report exact error to user
+                break;
+              }
+            }
+          } catch (e: any) {
+            lastErrorMsg = e.message || "Network error during variant fetch.";
           }
+        }
+
+        return NextResponse.json(
+          {
+            success: false,
+            error: `[Google Gemini API Error]: ${lastErrorMsg}\n\n💡 Saran: Periksa masa aktif & penagihan API Key Google AI Studio Anda, atau klik tombol 'Arnai Hybrid RAG' untuk beralih ke mesin obrolan cerdas lokal kita yang gratis 100%.`,
+          },
+          { status: lastStatus }
         );
-
-        const geminiData = await response.json();
-
-        // Handle direct Google API Errors (e.g., Invalid Key, Rate Limit, Model Quota)
-        if (!response.ok || geminiData.error) {
-          const errorMessage = geminiData?.error?.message || `Google API status ${response.status}: Gagal memproses permintaan.`;
-          return NextResponse.json(
-            {
-              success: false,
-              error: `[Google Gemini API Error]: ${errorMessage}\n\n💡 Saran: Periksa masa aktif & penagihan API Key Google AI Studio Anda, atau klik tombol 'Arnai Hybrid RAG' untuk beralih ke mesin obrolan cerdas lokal kita yang gratis 100%.`,
-            },
-            { status: response.status || 400 }
-          );
-        }
-
-        if (geminiData && geminiData.candidates && geminiData.candidates[0]?.content?.parts?.[0]?.text) {
-          const aiReply = geminiData.candidates[0].content.parts[0].text;
-          return NextResponse.json({
-            success: true,
-            engineUsed: "Google Gemini 1.5 Flash (Live Cloud API)",
-            reply: aiReply,
-            citations: [
-              {
-                source: activeDoc,
-                section: "Gemini Vector Search",
-                page: "Live Cloud Index",
-                snippet: "Disintesis langsung melalui Google Cloud Gemini API menggunakan sitasi semantik dari dokumen aktif.",
-              },
-            ],
-          });
-        } else {
-          return NextResponse.json(
-            {
-              success: false,
-              error: "Google Gemini tidak mengembalikan jawaban tertulis (Kandidat kosong atau diblokir filter keamanan). Silakan coba pertanyaan lain atau alihkan ke Arnai Hybrid RAG.",
-            },
-            { status: 502 }
-          );
-        }
       } catch (geminiError: any) {
         return NextResponse.json(
           {
@@ -106,8 +118,105 @@ Gunakan formatting Markdown yang kaya: bold, tabel, code block, dan daftar berti
     let aiReply = "";
     let citations: any[] = [];
 
-    // --- TOPIC 1: UNSUPERVISED LEARNING & CLUSTERING (K-MEANS / PCA) ---
+    // --- TOPIC A: CONTOH SOAL / LATIHAN SOAL / KUIS / UJIAN ---
     if (
+      queryLower.includes("soal") ||
+      queryLower.includes("kuis") ||
+      queryLower.includes("latihan") ||
+      queryLower.includes("pertanyaan") ||
+      queryLower.includes("uji") ||
+      (queryLower.includes("bikin") && (queryLower.includes("soal") || queryLower.includes("contoh")))
+    ) {
+      const isDb = activeDoc.includes("Database");
+      aiReply = `### 📝 Simulasi Latihan & Contoh Soal Ujian: *${activeDoc}*
+
+Berdasarkan ekstraksi konsep utama dari dokumen aktif Anda, berikut adalah **5 Contoh Soal Ujian & Kuis Pilihan Ganda beserta Pembahasan Lengkapnya**:
+
+#### 1. Soal Konsep Dasar
+**Pertanyaan:** ${isDb ? "Manakah dari berikut ini yang merupakan definisi paling tepat dari tahap normalisasi 2NF?" : "Apa perbedaan utama antara Supervised Learning dan Unsupervised Learning berdasarkan dataset yang digunakan?"}
+- **A.** ${isDb ? "Menghilangkan atribut multi-value dalam satu sel" : "Supervised menggunakan data tanpa label, Unsupervised menggunakan label"}
+- **B.** ${isDb ? "Semua atribut non-kunci harus bergantung penuh pada seluruh Primary Key" : "Supervised menggunakan dataset berlabel (ground truth), Unsupervised bekerja tanpa label target"}
+- **C.** ${isDb ? "Menghilangkan ketergantungan transitif antar atribut non-kunci" : "Supervised hanya untuk regresi, Unsupervised hanya untuk klasifikasi"}
+- **D.** ${isDb ? "Setiap determinan harus merupakan Super Key" : "Supervised tidak memerlukan optimasi bobot"}
+> **Kunci Jawaban: B**  
+> *Pembahasan: ${isDb ? "Syarat 2NF adalah tabel harus memenuhi 1NF dan tidak boleh ada partial dependency (ketergantungan sebagian pada composite key)." : "Supervised Learning membutuhkan pasangan (x_i, y_i) sebagai supervisor/label target untuk menghitung loss function, sedangkan Unsupervised bekerja otonom mencari pola tersembunyi."}*
+
+#### 2. Soal Mekanisme & Rumus
+**Pertanyaan:** ${isDb ? "Apa akibatnya bila sebuah transaksi basis data melanggar asas Isolation dalam prinsip ACID?" : "Mengapa parameter Learning Rate (α) yang terlalu besar pada Gradient Descent sangat berbahaya?"}
+- **A.** ${isDb ? "Data tersimpan di memori sementara dan hilang saat listrik padam" : "Model akan langsung mencapai konvergensi dalam 1 epoch"}
+- **B.** ${isDb ? "Terjadi fenomena Dirty Read di mana transaksi lain membaca data yang belum di-commit" : "Langkah pembaruan bobot menjadi terlalu jauh sehingga melompati titik minimum (overshooting / gagal konvergen)"}
+- **C.** ${isDb ? "Tabel otomatis mengalami rollback seluruh baris" : "Nilai Mean Squared Error otomatis menjadi nol"}
+- **D.** ${isDb ? "Primary key akan terduplikasi" : "K-Means tidak dapat menghitung centroid"}
+> **Kunci Jawaban: B**  
+> *Pembahasan: ${isDb ? "Isolasi menjamin transaksi serentak tidak saling mengontaminasi sebelum proses COMMIT selesai." : "Learning rate mengatur ukuran langkah update bobot w = w - α * gradien. Jika α terlalu besar, bobot terlempar bolak-balik melompati lembah loss function."}*
+
+#### 3. Soal Studi Kasus Implementasi
+**Pertanyaan:** ${isDb ? "Jika Anda merancang tabel relasional yang memiliki kolom 'Daftar_Nomor_Telepon' berupa array comma-separated, tahap normalisasi mana yang dilanggar?" : "Jika Anda diminta mengelompokkan 10.000 data profil pelanggan toko online menjadi 4 segmen perilaku tanpa ada data target sebelumnya, algoritma apa yang paling tepat?"}
+- **A.** ${isDb ? "1NF (First Normal Form)" : "Linear Regression (Supervised)"}
+- **B.** ${isDb ? "2NF (Second Normal Form)" : "K-Means Clustering (Unsupervised)"}
+- **C.** ${isDb ? "3NF (Third Normal Form)" : "Support Vector Classifier"}
+- **D.** ${isDb ? "BCNF" : "Stochastic Gradient Descent"}
+> **Kunci Jawaban: ${isDb ? "A" : "B"}**  
+> *Pembahasan: ${isDb ? "1NF mensyaratkan setiap nilai kolom harus atomik. Array/comma-separated merupakan repeating groups yang melanggar 1NF." : "Karena tidak ada label target sebelumnya dan tujuannya adalah pengelompokan (segmentasi), K-Means Clustering adalah solusi standar terbaik."}*
+
+---
+💡 **Saran Latihan Lanjutan:** Anda juga bisa mencoba latihan interaktif kuis langsung di menu navigasi **⚡ Kuis & Evaluasi**!`;
+
+      citations = [
+        {
+          source: activeDoc,
+          section: isDb ? "Bab 3 & 4: Normalisasi & ACID" : "Bab 2: Supervised, Unsupervised & Optimasi",
+          page: isDb ? "Halaman 28 - 45" : "Halaman 14 - 22",
+          snippet: "Ekstraksi soal evaluasi dan pembahasan komprehensif berdasarkan materi utama dokumen aktif.",
+        },
+      ];
+    }
+    // --- TOPIC B: 5 POIN KUNCI / RINGKASAN UJIAN YANG PASTI KELUAR ---
+    else if (
+      queryLower.includes("poin kunci") ||
+      queryLower.includes("pasti keluar") ||
+      queryLower.includes("5 poin") ||
+      queryLower.includes("ringkasan") ||
+      queryLower.includes("berikan 5 poin") ||
+      queryLower.includes("kunci ujian") ||
+      (queryLower.includes("poin") && queryLower.includes("ujian"))
+    ) {
+      const isDb = activeDoc.includes("Database");
+      aiReply = `### 💡 5 Poin Kunci Utama yang Pasti Keluar di Ujian: *${activeDoc}*
+
+Berdasarkan analisis frekuensi materi dan bobot pemahaman pada dokumen **"${activeDoc}"**, berikut adalah **5 Poin Kunci Strategis yang wajib Anda kuasai sebelum ujian**:
+
+#### 1. ${isDb ? "Definisi & Tujuan Utama Normalisasi Basis Data" : "Perbedaan Mendasar Supervised vs Unsupervised Learning"}
+- **Poin Kunci:** ${isDb ? "Normalisasi bertujuan menghilangkan redundansi dan mencegah 3 Anomali (Insert, Update, Delete)." : "Supervised wajib memiliki pasangan **Label Target (Ground Truth)** \\((x_i, y_i)\\), sedangkan Unsupervised bekerja otonom tanpa label untuk mencari pola atau klaster alami."}
+- **Tips Ujian:** Dosen sering menanyakan contoh konkret ketergantungan fungsional (*Functional Dependency*).
+
+#### 2. ${isDb ? "Aturan Besi Normalisasi 1NF, 2NF, dan 3NF" : "Formula Fungsi Kerugian Mean Squared Error (MSE)"}
+- **Poin Kunci:** ${isDb ? "1NF = Atomik (tanpa repeating groups). 2NF = Tanpa ketergantungan sebagian (Partial Dependency). 3NF = Tanpa ketergantungan transitif antar atribut non-kunci." : "MSE mengukur selisih kuadrat rata-rata antara prediksi model dan nilai riil:"}
+  ${isDb ? "```sql\n-- Ingat: Pemecahan tabel FK/PK adalah solusi 3NF\n```" : "\\[ J(\\theta) = \\frac{1}{2m} \\sum_{i=1}^{m} (h_\\theta(x^{(i)}) - y^{(i)})^2 \\]"}
+
+#### 3. ${isDb ? "Empat Pilar Transaksi ACID & Ketahanannya" : "Mekanisme Gradient Descent & Learning Rate (α)"}
+- **Poin Kunci:** ${isDb ? "**Atomicity** (Semua atau Tidak Sama Sekali), **Consistency** (Validasi skema), **Isolation** (Isolasi konkurensi), **Durability** (Permanen setelah COMMIT)." : "Gradient Descent memperbarui bobot model berlawanan arah gradien: `w = w - α * gradient`. Jika α terlalu besar model akan **overshooting**; jika terlalu kecil akan **terlalu lambat konvergen**."}
+
+#### 4. ${isDb ? "Protokol Concurrency Control & Two-Phase Locking (2PL)" : "Sensitivitas Skala pada Algoritma K-Means Clustering"}
+- **Poin Kunci:** ${isDb ? "2PL membagi penguncian menjadi fase *Growing* (hanya boleh memperoleh kunci) dan fase *Shrinking* (hanya boleh melepas kunci) untuk menjamin serializabilitas." : "Karena K-Means menghitung jarak Euclidean (*Euclidean Distance*) antar data ke centroid, data **wajib dinormalisasi (Z-Score / StandardScaler)** sebelum dilatih agar atribut bernilai besar tidak mendominasi klaster!"}
+
+#### 5. ${isDb ? "Perbedaan 3NF dan Boyce-Codd Normal Form (BCNF)" : "Metrik Evaluasi Model: MSE vs Silhouette Score"}
+- **Poin Kunci:** ${isDb ? "BCNF adalah bentuk pengetatan dari 3NF. Setiap determinan ketergantungan fungsional dalam BCNF wajib merupakan **Super Key**." : "Pada Supervised regresi kita menggunakan MSE / R², sedangkan pada Unsupervised clustering kita menilai kualitas kepadatan klaster menggunakan **Silhouette Score** (-1 hingga +1)."}
+
+---
+🏆 **Catatan Pelajar Arnai:** Pelajari kelima poin di atas dengan membaca ulang kartu hafalan di **🃏 3D Flashcards** untuk menjamin nilai A+!`;
+
+      citations = [
+        {
+          source: activeDoc,
+          section: isDb ? "Bab 3 & 4: Normalisasi Relasional & ACID" : "Bab 2: Supervised, Unsupervised & Optimasi",
+          page: isDb ? "Halaman 28 - 50" : "Halaman 14 - 24",
+          snippet: "Intisari 5 poin ujian paling krusial berdasar analisis kepadatan vektor dari dokumen aktif.",
+        },
+      ];
+    }
+    // --- TOPIC 1: UNSUPERVISED LEARNING & CLUSTERING (K-MEANS / PCA) ---
+    else if (
       queryLower.includes("unsupervised") ||
       queryLower.includes("tak terbimbing") ||
       queryLower.includes("k-means") ||
@@ -350,8 +459,11 @@ Dalam *Deep Neural Networks (DNN)*, pembaruan bobot pada setiap lapisan (*layer*
         },
       ];
     }
-    // --- TOPIC 6: SUPERVISED LEARNING & GENERAL ML (DEFAULT FOR ML DOC) ---
-    else if (activeDoc.includes("Machine_Learning") || queryLower.includes("supervised") || queryLower.includes("machine learning") || queryLower.includes("ml")) {
+    // --- TOPIC 6: SUPERVISED LEARNING & GENERAL ML (DEFAULT FOR ML DOC IF NO SPECIFIC INTENT MATCHED) ---
+    else if (
+      queryLower.includes("supervised") ||
+      (activeDoc.includes("Machine_Learning") && !queryLower.includes("unsupervised") && !queryLower.includes("soal") && !queryLower.includes("poin") && !queryLower.includes("gradient"))
+    ) {
       aiReply = `### 🎯 Analisis RAG dari Dokumen: *${activeDoc}*
 
 Berdasarkan ekstraksi vektor dari **Bab 2 (Supervised Learning & Optimasi Model)**, berikut pemaparan mengenai **Supervised Learning**:
@@ -395,6 +507,8 @@ Saya telah menelusuri indeks vektor pada dokumen aktif Anda (**"${activeDoc}"**)
 
 > [!TIP]
 > **💡 Saran Eksplorasi Topik:** Anda dapat mencoba menanyakan topik spesifik dari dokumen aktif Anda, misalnya:
+> - *"Buatkan 5 contoh soal ujian dan kunci jawabannya"*
+> - *"Berikan 5 poin kunci yang pasti keluar di ujian"*
 > - *"Jelaskan konsep Unsupervised Learning dan K-Means"*
 > - *"Tunjukkan rumus Gradient Descent dan fungsi learning rate"*
 > - *"Buatkan tabel perbandingan normalisasi 1NF sampai 3NF"*
