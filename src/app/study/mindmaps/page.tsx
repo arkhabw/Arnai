@@ -352,7 +352,7 @@ function MindmapsContent() {
           <div className="bg-card/90 border-b border-border p-3 sm:px-6 flex flex-wrap items-center justify-between gap-3 shrink-0">
             <div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-bold text-xs mb-1 border border-primary/20">
-                <Network className="w-3.5 h-3.5" /> Phase 9: Interactive Visual Mindmap (@xyflow/react Flow)
+                <Network className="w-3.5 h-3.5" /> Peta Konsep Visual & Mindmap Interaktif
               </div>
               <h1 className="text-lg sm:text-xl font-black text-foreground">
                 Peta Konsep Vektor RAG Interaktif

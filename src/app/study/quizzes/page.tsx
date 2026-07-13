@@ -398,7 +398,7 @@ function QuizzesContent() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/80 pb-5">
             <div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-bold text-xs mb-2 border border-primary/20">
-                <HelpCircle className="w-3.5 h-3.5" /> Phase 8: AI Quiz Generator & Live Exam Mode
+                <HelpCircle className="w-3.5 h-3.5" /> Generator Kuis AI & Simulasi Ujian
               </div>
               <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground">
                 Kuis Evaluasi & Simulasi Ujian

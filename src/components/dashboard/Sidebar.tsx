@@ -20,16 +20,16 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { name: "Dashboard Utama", href: "/dashboard", icon: LayoutDashboard, badge: "Aktif" },
-  { name: "Materi & Dokumen", href: "/documents", icon: FileText, badge: "Phase 4" },
-  { name: "AI Chat RAG", href: "/chat", icon: MessageSquare, badge: "Phase 5" },
-  { name: "Ringkasan & Highlight", href: "/study/summary", icon: Sparkles, badge: "Phase 6" },
-  { name: "3D Flashcard & SRS", href: "/study/flashcards", icon: Layers, badge: "Phase 7" },
-  { name: "AI Quiz Generator", href: "/study/quizzes", icon: HelpCircle, badge: "Phase 8" },
-  { name: "Interactive Mindmap", href: "/study/mindmaps", icon: Network, badge: "Phase 9" },
-  { name: "Pomodoro Focus Timer", href: "/pomodoro", icon: Clock, badge: "Phase 10" },
-  { name: "Pencapaian & Lencana", href: "/achievements", icon: Award, badge: "Phase 10" },
-  { name: "Klasemen Pelajar", href: "/leaderboard", icon: Trophy, badge: "Phase 10" },
+  { name: "Dashboard Utama", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Materi & Dokumen", href: "/documents", icon: FileText },
+  { name: "AI Chat RAG", href: "/chat", icon: MessageSquare },
+  { name: "Ringkasan & Highlight", href: "/study/summary", icon: Sparkles },
+  { name: "3D Flashcard & SRS", href: "/study/flashcards", icon: Layers },
+  { name: "AI Quiz Generator", href: "/study/quizzes", icon: HelpCircle },
+  { name: "Interactive Mindmap", href: "/study/mindmaps", icon: Network },
+  { name: "Pomodoro Focus Timer", href: "/pomodoro", icon: Clock },
+  { name: "Pencapaian & Lencana", href: "/achievements", icon: Award },
+  { name: "Klasemen Pelajar", href: "/leaderboard", icon: Trophy },
 ];
 
 export function DashboardSidebar() {
@@ -60,19 +60,6 @@ export function DashboardSidebar() {
                   <Icon className="w-4 h-4 shrink-0" />
                   <span>{item.name}</span>
                 </div>
-                {item.badge && (
-                  <span
-                    className={`px-1.5 py-0.5 rounded text-[9px] font-extrabold ${
-                      isActive
-                        ? "bg-white/20 text-white"
-                        : item.badge === "Aktif"
-                        ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
-                        : "bg-secondary text-muted-foreground border border-border"
-                    }`}
-                  >
-                    {item.badge}
-                  </span>
-                )}
               </Link>
             );
           })}

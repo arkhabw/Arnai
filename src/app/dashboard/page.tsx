@@ -212,7 +212,7 @@ export default function DashboardPage() {
 
             <div className="relative z-10 max-w-xl">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-bold text-xs mb-3 border border-primary/20">
-                <Sparkles className="w-3.5 h-3.5" /> Phase 3: Study Analytics & Progress Dashboard
+                <Sparkles className="w-3.5 h-3.5" /> Analisis Belajar & Dasbor Progres
               </div>
               <h1 className="text-2xl sm:text-4xl font-black tracking-tight mb-2">
                 Halo, <span className="text-primary">{currentUser.name}</span> 👋
