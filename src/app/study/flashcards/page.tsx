@@ -449,6 +449,7 @@ function FlashcardsContent() {
               >
                 <motion.div
                   className="w-full h-full relative preserve-3d transition-transform duration-500 rounded-3xl"
+                  style={{ transformStyle: "preserve-3d" }}
                   animate={{ rotateY: isFlipped ? 180 : 0 }}
                   transition={{ type: "spring", stiffness: 260, damping: 25 }}
                 >
@@ -457,6 +458,7 @@ function FlashcardsContent() {
                     className={`absolute inset-0 w-full h-full rounded-3xl bg-card border-2 border-border p-6 sm:p-10 flex flex-col justify-between backface-hidden shadow-2xl ${
                       isFlipped ? "pointer-events-none" : ""
                     }`}
+                    style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
                   >
                     <div className="flex items-center justify-between gap-3">
                       <span className={`px-3 py-1 rounded-full text-xs font-black border ${currentCard?.badgeColor}`}>
@@ -505,9 +507,14 @@ function FlashcardsContent() {
 
                   {/* BACK SIDE */}
                   <div
-                    className={`absolute inset-0 w-full h-full rounded-3xl bg-card border-2 border-primary/50 p-6 sm:p-10 flex flex-col justify-between backface-hidden shadow-2xl rotate-y-180 ${
+                    className={`absolute inset-0 w-full h-full rounded-3xl bg-card border-2 border-primary/50 p-6 sm:p-10 flex flex-col justify-between backface-hidden shadow-2xl ${
                       !isFlipped ? "pointer-events-none" : ""
                     }`}
+                    style={{
+                      transform: "rotateY(180deg)",
+                      backfaceVisibility: "hidden",
+                      WebkitBackfaceVisibility: "hidden",
+                    }}
                   >
                     <div className="flex items-center justify-between gap-3">
                       <span className="px-3 py-1 rounded-full text-xs font-black bg-primary/15 text-primary border border-primary/30">
