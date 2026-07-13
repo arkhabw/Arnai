@@ -12,7 +12,7 @@ import {
   BarChart,
   Bar,
 } from "recharts";
-import { Clock, CheckCircle, TrendingUp, Sparkles, BarChart2 } from "lucide-react";
+import { Clock, CheckCircle, TrendingUp, Sparkles } from "lucide-react";
 
 const weeklyData = [
   { day: "Sen", menit: 45, kuis: 3, akurasi: 85 },
@@ -34,6 +34,11 @@ const monthlyData = [
 export function StudyChart({ isDemo }: { isDemo: boolean }) {
   const [timeRange, setTimeRange] = useState<"weekly" | "monthly">("weekly");
   const [chartType, setChartType] = useState<"area" | "bar">("area");
+  const [activeMetrics, setActiveMetrics] = useState({
+    menit: true,
+    kuis: true,
+    akurasi: true,
+  });
 
   const data = timeRange === "weekly" ? weeklyData : monthlyData;
   const totalMinutes = data.reduce((acc, curr) => acc + curr.menit, 0);
@@ -150,6 +155,41 @@ export function StudyChart({ isDemo }: { isDemo: boolean }) {
         </div>
       </div>
 
+      {/* Metric Toggle Filters */}
+      <div className="flex flex-wrap items-center gap-2 mb-4 pb-3 border-b border-border/60">
+        <span className="text-xs font-bold text-muted-foreground mr-1.5">Tampilkan di Grafik:</span>
+        <button
+          onClick={() => setActiveMetrics((p) => ({ ...p, menit: !p.menit }))}
+          className={`px-3 py-1 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 ${
+            activeMetrics.menit
+              ? "bg-blue-500/10 text-primary border-primary/30 shadow-sm"
+              : "bg-secondary/40 text-muted-foreground border-border opacity-50"
+          }`}
+        >
+          <span className="w-2 h-2 rounded-full bg-blue-500" /> Durasi Belajar (Menit)
+        </button>
+        <button
+          onClick={() => setActiveMetrics((p) => ({ ...p, kuis: !p.kuis }))}
+          className={`px-3 py-1 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 ${
+            activeMetrics.kuis
+              ? "bg-indigo-500/10 text-indigo-400 border-indigo-500/30 shadow-sm"
+              : "bg-secondary/40 text-muted-foreground border-border opacity-50"
+          }`}
+        >
+          <span className="w-2 h-2 rounded-full bg-indigo-400" /> Soal Kuis Selesai
+        </button>
+        <button
+          onClick={() => setActiveMetrics((p) => ({ ...p, akurasi: !p.akurasi }))}
+          className={`px-3 py-1 rounded-xl text-xs font-bold border transition-all flex items-center gap-1.5 ${
+            activeMetrics.akurasi
+              ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/30 shadow-sm"
+              : "bg-secondary/40 text-muted-foreground border-border opacity-50"
+          }`}
+        >
+          <span className="w-2 h-2 rounded-full bg-emerald-500" /> Skor Kuis (%)
+        </button>
+      </div>
+
       {/* Recharts Container */}
       <div className="w-full h-[240px] sm:h-[280px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -163,6 +203,10 @@ export function StudyChart({ isDemo }: { isDemo: boolean }) {
                 <linearGradient id="colorKuis" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#6366f1" stopOpacity={0.4} />
                   <stop offset="95%" stopColor="#6366f1" stopOpacity={0.0} />
+                </linearGradient>
+                <linearGradient id="colorAkurasi" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.4} />
+                  <stop offset="95%" stopColor="#10b981" stopOpacity={0.0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255, 255, 255, 0.08)" />
@@ -187,27 +231,50 @@ export function StudyChart({ isDemo }: { isDemo: boolean }) {
                   fontWeight: "bold",
                 }}
                 formatter={(value: any, name: any) => [
-                  name === "menit" ? `${value} Menit Belajar` : `${value} Soal Kuis`,
-                  name === "menit" ? "Durasi Belajar" : "Kuis & Flashcard",
+                  name === "menit"
+                    ? `${value} Menit Belajar`
+                    : name === "kuis"
+                    ? `${value} Soal Kuis`
+                    : `${value}% Skor Kuis`,
+                  name === "menit"
+                    ? "Durasi Belajar"
+                    : name === "kuis"
+                    ? "Kuis Selesai"
+                    : "Skor Kuis (%)",
                 ]}
               />
-              <Area
-                type="monotone"
-                dataKey="menit"
-                stroke="#2563eb"
-                strokeWidth={3}
-                fillOpacity={1}
-                fill="url(#colorMenit)"
-                activeDot={{ r: 6, strokeWidth: 0, fill: "#3b82f6" }}
-              />
-              <Area
-                type="monotone"
-                dataKey="kuis"
-                stroke="#6366f1"
-                strokeWidth={2}
-                fillOpacity={1}
-                fill="url(#colorKuis)"
-              />
+              {activeMetrics.menit && (
+                <Area
+                  type="monotone"
+                  dataKey="menit"
+                  stroke="#2563eb"
+                  strokeWidth={3}
+                  fillOpacity={1}
+                  fill="url(#colorMenit)"
+                  activeDot={{ r: 6, strokeWidth: 0, fill: "#3b82f6" }}
+                />
+              )}
+              {activeMetrics.kuis && (
+                <Area
+                  type="monotone"
+                  dataKey="kuis"
+                  stroke="#6366f1"
+                  strokeWidth={2}
+                  fillOpacity={1}
+                  fill="url(#colorKuis)"
+                />
+              )}
+              {activeMetrics.akurasi && (
+                <Area
+                  type="monotone"
+                  dataKey="akurasi"
+                  stroke="#10b981"
+                  strokeWidth={2.5}
+                  fillOpacity={1}
+                  fill="url(#colorAkurasi)"
+                  activeDot={{ r: 6, strokeWidth: 0, fill: "#10b981" }}
+                />
+              )}
             </AreaChart>
           ) : (
             <BarChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -233,12 +300,23 @@ export function StudyChart({ isDemo }: { isDemo: boolean }) {
                   fontWeight: "bold",
                 }}
                 formatter={(value: any, name: any) => [
-                  name === "menit" ? `${value} Menit Belajar` : `${value} Soal Kuis`,
-                  name === "menit" ? "Durasi Belajar" : "Kuis & Flashcard",
+                  name === "menit"
+                    ? `${value} Menit Belajar`
+                    : name === "kuis"
+                    ? `${value} Soal Kuis`
+                    : `${value}% Skor Kuis`,
+                  name === "menit"
+                    ? "Durasi Belajar"
+                    : name === "kuis"
+                    ? "Kuis Selesai"
+                    : "Skor Kuis (%)",
                 ]}
               />
-              <Bar dataKey="menit" fill="#2563eb" radius={[6, 6, 0, 0]} name="Waktu (Menit)" />
-              <Bar dataKey="kuis" fill="#6366f1" radius={[6, 6, 0, 0]} name="Kuis Selesai" />
+              {activeMetrics.menit && <Bar dataKey="menit" fill="#2563eb" radius={[6, 6, 0, 0]} name="Waktu (Menit)" />}
+              {activeMetrics.kuis && <Bar dataKey="kuis" fill="#6366f1" radius={[6, 6, 0, 0]} name="Kuis Selesai" />}
+              {activeMetrics.akurasi && (
+                <Bar dataKey="akurasi" fill="#10b981" radius={[6, 6, 0, 0]} name="Skor Kuis (%)" />
+              )}
             </BarChart>
           )}
         </ResponsiveContainer>
