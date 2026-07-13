@@ -490,45 +490,6 @@ Dalam *Deep Neural Networks (DNN)*, pembaruan bobot pada setiap lapisan (*layer*
         "Mengapa fungsi aktivasi ReLU lebih disukai daripada Sigmoid?"
       ];
     }
-    // --- TOPIC 6: SUPERVISED LEARNING & GENERAL ML (DEFAULT FOR ML DOC IF NO SPECIFIC INTENT MATCHED) ---
-    else if (
-      queryLower.includes("supervised") ||
-      (activeDoc.includes("Machine_Learning") && !queryLower.includes("unsupervised") && !queryLower.includes("soal") && !queryLower.includes("poin") && !queryLower.includes("gradient"))
-    ) {
-      aiReply = `### 🎯 Analisis RAG dari Dokumen: *${activeDoc}*
-
-Berdasarkan ekstraksi vektor dari **Bab 2 (Supervised Learning & Optimasi Model)**, berikut pemaparan mengenai **Supervised Learning**:
-
-#### 1. Konsep Utama & Mekanisme
-Dalam *Supervised Learning*, algoritma dilatih menggunakan dataset yang memiliki **label target (*ground truth*)** \\((x_i, y_i)\\). Tujuan utama model adalah menemukan fungsi pemetaan \\(f(x) \\approx y\\) yang meminimalkan kesalahan prediksi pada data yang belum pernah dilihat (*generalization error*).
-
-#### 2. Pembagian Kategori Tugas (*Task Categories*)
-1. **Regresi (Regression)**: Memprediksi variabel kontinu berangka (contoh: prediksi harga saham atau temperatur cuaca).
-2. **Klasifikasi (Classification)**: Membagi data ke dalam kelas-kelas diskrit (contoh: klasifikasi email spam vs non-spam, atau diagnosis penyakit medis).
-
----
-💡 **Poin Ujian Penting:** Jika Anda ingin mengeksplorasi tentang **Unsupervised Learning (Pembelajaran Tak Terbimbing)** dari bab ini, silakan ketik *"Jelaskan Unsupervised Learning"* atau *"Jelaskan K-Means Clustering"*!`;
-
-      citations = [
-        {
-          source: activeDoc,
-          section: "Bab 2.1: Supervised vs Unsupervised Learning Paradigms",
-          page: "Halaman 14 - 15",
-          snippet: "Supervised learning memerlukan dataset berlabel untuk melatih parameter bobot model pemetaan variabel input ke target output...",
-        },
-        {
-          source: activeDoc,
-          section: "Bab 2.2: Regression vs Classification Tasks",
-          page: "Halaman 15",
-          snippet: "Regresi memprediksi nilai kuantitatif kontinu sedangkan klasifikasi memisahkan ruang fitur ke dalam batas keputusan kelas...",
-        },
-      ];
-      suggestedFollowUps = [
-        "Jelaskan perbedaan tugas Klasifikasi dan Regresi",
-        "Berikan contoh algoritma Supervised untuk klasifikasi",
-        "Bagaimana cara mengevaluasi akurasi model regresi?"
-      ];
-    }
     // --- TOPIC C: DYNAMIC ACADEMIC STUDY TIMELINE & PLANNER ---
     else if (
       queryLower.includes("jadwal") ||
@@ -713,6 +674,45 @@ Berikut adalah panduan menyusun dan menstrukturkan tulisan ilmiah (skripsi/jurna
         "Buatkan kerangka outline untuk Bab 1 Skripsi",
         "Berikan contoh pendahuluan esai ilmiah bertema AI",
         "Menerjemahkan paragraf abstrak ke Bahasa Inggris akademik"
+      ];
+    }
+    // --- TOPIC 6: SUPERVISED LEARNING & GENERAL ML (DEFAULT FOR ML DOC IF NO SPECIFIC INTENT MATCHED) ---
+    else if (
+      queryLower.includes("supervised") ||
+      (activeDoc.includes("Machine_Learning") && !queryLower.includes("unsupervised") && !queryLower.includes("soal") && !queryLower.includes("poin") && !queryLower.includes("gradient"))
+    ) {
+      aiReply = `### 🎯 Analisis RAG dari Dokumen: *${activeDoc}*
+
+Berdasarkan ekstraksi vektor dari **Bab 2 (Supervised Learning & Optimasi Model)**, berikut pemaparan mengenai **Supervised Learning**:
+
+#### 1. Konsep Utama & Mekanisme
+Dalam *Supervised Learning*, algoritma dilatih menggunakan dataset yang memiliki **label target (*ground truth*)** \\((x_i, y_i)\\). Tujuan utama model adalah menemukan fungsi pemetaan \\(f(x) \\approx y\\) yang meminimalkan kesalahan prediksi pada data yang belum pernah dilihat (*generalization error*).
+
+#### 2. Pembagian Kategori Tugas (*Task Categories*)
+1. **Regresi (Regression)**: Memprediksi variabel kontinu berangka (contoh: prediksi harga saham atau temperatur cuaca).
+2. **Klasifikasi (Classification)**: Membagi data ke dalam kelas-kelas diskrit (contoh: klasifikasi email spam vs non-spam, atau diagnosis penyakit medis).
+
+---
+💡 **Poin Kunci Ujian:** Jika Anda ingin mengeksplorasi tentang **Unsupervised Learning (Pembelajaran Tak Terbimbing)** dari bab ini, silakan ketik *"Jelaskan Unsupervised Learning"* atau *"Jelaskan K-Means Clustering"*!`;
+
+      citations = [
+        {
+          source: activeDoc,
+          section: "Bab 2.1: Supervised vs Unsupervised Learning Paradigms",
+          page: "Halaman 14 - 15",
+          snippet: "Supervised learning memerlukan dataset berlabel untuk melatih parameter bobot model pemetaan variabel input ke target output...",
+        },
+        {
+          source: activeDoc,
+          section: "Bab 2.2: Regression vs Classification Tasks",
+          page: "Halaman 15",
+          snippet: "Regresi memprediksi nilai kuantitatif kontinu sedangkan klasifikasi memisahkan ruang fitur ke dalam batas keputusan kelas...",
+        },
+      ];
+      suggestedFollowUps = [
+        "Jelaskan perbedaan tugas Klasifikasi dan Regresi",
+        "Berikan contoh algoritma Supervised untuk klasifikasi",
+        "Bagaimana cara mengevaluasi akurasi model regresi?"
       ];
     }
     // --- TOPIC G: SMART FALLBACK FOR GENERAL / OTHER QUERIES ---
