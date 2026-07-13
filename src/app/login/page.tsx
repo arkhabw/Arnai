@@ -41,13 +41,12 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 function LoginContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { login, register: registerUser, loginWithGoogle, loginAsQuickDemo, isLoading: authLoading } = useAuth();
+  const { login, register: registerUser, loginWithGoogle, isLoading: authLoading } = useAuth();
 
   const initialMode = searchParams.get("mode") === "register" ? "register" : "login";
   const [mode, setMode] = useState<"login" | "register">(initialMode);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-  const [isDemoLoading, setIsDemoLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   // Hook form for login
@@ -100,32 +99,19 @@ function LoginContent() {
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = () => {
     setErrorMsg(null);
     setIsGoogleLoading(true);
-    try {
-      const success = await loginWithGoogle();
-      if (success) {
-        setSuccessMsg("Terhubung dengan akun Google! Mengalihkan ke workspace...");
-        setTimeout(() => {
-          router.push("/dashboard");
-        }, 600);
-      }
-    } catch (e) {
-      setErrorMsg("Gagal menghubungkan dengan Google OAuth.");
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    if (!clientId) {
+      setErrorMsg("Google Client ID belum dikonfigurasi di file environment (.env). Silakan atur NEXT_PUBLIC_GOOGLE_CLIENT_ID Anda.");
       setIsGoogleLoading(false);
+      return;
     }
-  };
-
-  const handleQuickDemo = async () => {
-    setErrorMsg(null);
-    setIsDemoLoading(true);
-    try {
-      await loginAsQuickDemo();
-    } catch (e) {
-      setErrorMsg("Gagal masuk mode demo.");
-      setIsDemoLoading(false);
-    }
+    const redirectUri = encodeURIComponent(`${window.location.origin}/auth/google-callback`);
+    const scope = encodeURIComponent("https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email");
+    const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=${scope}`;
+    window.location.href = oauthUrl;
   };
 
   return (
@@ -208,46 +194,12 @@ function LoginContent() {
             </div>
           </div>
 
-          {/* Quick Demo Hero CTA */}
-          <div className="mb-4">
-            <button
-              type="button"
-              onClick={handleQuickDemo}
-              disabled={isDemoLoading || authLoading || isGoogleLoading}
-              className="w-full relative group overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white p-4 shadow-md transition-all duration-300 active:scale-[0.99] disabled:opacity-70"
-            >
-              <div className="flex items-center justify-between relative z-10">
-                <div className="flex items-center gap-3 text-left">
-                  <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center shrink-0 border border-white/20">
-                    <Zap className="w-5 h-5 text-amber-300 fill-amber-300 animate-pulse" />
-                  </div>
-                  <div>
-                    <div className="text-xs font-bold uppercase tracking-wider text-blue-200">
-                      Rekomendasi Tercepat
-                    </div>
-                    <div className="text-sm font-extrabold text-white">
-                      ⚡ Quick Demo Login (Seed Mode)
-                    </div>
-                  </div>
-                </div>
-                {isDemoLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin text-white" />
-                ) : (
-                  <ArrowRight className="w-5 h-5 text-white group-hover:translate-x-1 transition-transform" />
-                )}
-              </div>
-              <div className="mt-2 text-left text-[11px] text-blue-100 font-medium bg-white/10 px-2.5 py-1 rounded-lg">
-                ✨ Masuk instan sebagai <strong>Arkha B. W.</strong> dengan data 2 materi, kuis & flashcard contoh siap pakai!
-              </div>
-            </button>
-          </div>
-
           {/* Google OAuth Login Button */}
           <div className="mb-6">
             <button
               type="button"
               onClick={handleGoogleLogin}
-              disabled={isGoogleLoading || authLoading || isDemoLoading}
+              disabled={isGoogleLoading || authLoading}
               className="w-full py-3 px-4 rounded-2xl bg-card hover:bg-secondary/80 border border-border text-foreground font-bold text-sm transition-all shadow-sm active:scale-[0.99] flex items-center justify-center gap-3 disabled:opacity-70 group"
             >
               {isGoogleLoading ? (

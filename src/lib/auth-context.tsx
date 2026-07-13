@@ -21,36 +21,9 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password?: string) => Promise<boolean>;
   register: (name: string, email: string, password?: string) => Promise<boolean>;
-  loginWithGoogle: () => Promise<boolean>;
-  loginAsQuickDemo: () => Promise<void>;
+  loginWithGoogle: (accessToken: string) => Promise<boolean>;
   logout: () => void;
 }
-
-const DEMO_USER: UserProfile = {
-  id: "usr-demo-arkha",
-  name: "Arkha B. W.",
-  email: "arkha@arnai.ai",
-  avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-  role: "Pro Student Account",
-  isDemo: true,
-  provider: "demo",
-  streakDays: 7,
-  completedQuizzes: 14,
-  masteredFlashcards: 68,
-};
-
-const GOOGLE_USER: UserProfile = {
-  id: "usr-google-arkha",
-  name: "Arkha B. W.",
-  email: "arkhabw@gmail.com",
-  avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-  role: "Pro Google Account",
-  isDemo: false,
-  provider: "google",
-  streakDays: 3,
-  completedQuizzes: 5,
-  masteredFlashcards: 24,
-};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -134,21 +107,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return true;
   };
 
-  const loginWithGoogle = async (): Promise<boolean> => {
+  const loginWithGoogle = async (accessToken: string): Promise<boolean> => {
     setIsLoading(true);
-    // Simulate Google OAuth handshake
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    persistUser(GOOGLE_USER);
-    setIsLoading(false);
-    return true;
-  };
+    try {
+      const res = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${accessToken}`);
+      if (!res.ok) {
+        throw new Error("Gagal mengambil data profil Google");
+      }
+      const googleData = await res.json();
 
-  const loginAsQuickDemo = async (): Promise<void> => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    persistUser(DEMO_USER);
-    setIsLoading(false);
-    router.push("/dashboard");
+      const loggedInUser: UserProfile = {
+        id: "usr-google-" + googleData.sub,
+        name: googleData.name || "Pengguna Google",
+        email: googleData.email,
+        avatar: googleData.picture || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+        role: "Student Account",
+        isDemo: false,
+        provider: "google",
+        streakDays: 1,
+        completedQuizzes: 0,
+        masteredFlashcards: 0,
+      };
+
+      persistUser(loggedInUser);
+      setIsLoading(false);
+      return true;
+    } catch (e) {
+      setIsLoading(false);
+      throw e;
+    }
   };
 
   const logout = () => {
@@ -164,7 +151,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         register,
         loginWithGoogle,
-        loginAsQuickDemo,
         logout,
       }}
     >
