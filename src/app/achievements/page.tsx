@@ -50,7 +50,7 @@ const badges: BadgeItem[] = [
   {
     id: "bdg-2",
     title: "🃏 Spaced Repetition Master",
-    description: "Menandai 20 kartu hafalan sebagai 'Menguasai (Easy)' pada ruang 3D Flashcard (`/study/flashcards`).",
+    description: "Menandai 20 kartu hafalan sebagai 'Menguasai (Easy)' pada ruang 3D Flashcard.",
     xp: 150,
     unlocked: true,
     icon: "🃏",
@@ -59,7 +59,7 @@ const badges: BadgeItem[] = [
   {
     id: "bdg-3",
     title: "🏆 UTS Flawless Victory",
-    description: "Mendatangkan skor akurasi 100% pada simulasi ujian kuis Machine Learning Bab 2 (`/study/quizzes`).",
+    description: "Mendatangkan skor akurasi 100% pada simulasi ujian kuis Machine Learning Bab 2.",
     xp: 300,
     unlocked: true,
     icon: "🏆",
@@ -68,7 +68,7 @@ const badges: BadgeItem[] = [
   {
     id: "bdg-4",
     title: "🧠 Semantic Mindmap Explorer",
-    description: "Mengklik dan mempelajari rumus dari 8 node konsep pada ruang Interactive Mindmap (`/study/mindmaps`).",
+    description: "Mengklik dan mempelajari rumus dari 8 node konsep pada ruang Interactive Mindmap.",
     xp: 100,
     unlocked: true,
     icon: "🧠",
@@ -77,7 +77,7 @@ const badges: BadgeItem[] = [
   {
     id: "bdg-5",
     title: "⏱️ Deep Work Pomodoro Guru",
-    description: "Menyelesaikan total 10 sesi fokus 25 menit di Pomodoro Timer (`/pomodoro`).",
+    description: "Menyelesaikan total 10 sesi fokus 25 menit di Pomodoro Timer.",
     xp: 500,
     unlocked: false,
     progressPercent: 70,
@@ -87,7 +87,7 @@ const badges: BadgeItem[] = [
   {
     id: "bdg-6",
     title: "📑 RAG Document Pioneer",
-    description: "Mengunggah dan mengekstrak vektor dari 5 dokumen PDF/DOCX di perpustakaan materi (`/documents`).",
+    description: "Mengunggah dan mengekstrak vektor dari 5 dokumen PDF/DOCX di perpustakaan materi.",
     xp: 200,
     unlocked: false,
     progressPercent: 40,
@@ -145,7 +145,7 @@ function AchievementsContent() {
               href="/chat"
               className="px-3.5 py-1.5 rounded-xl border border-border bg-card hover:bg-secondary text-xs font-bold transition-colors flex items-center gap-1.5"
             >
-              Buka AI Chat (`/chat`)
+              💬 Buka AI Chat
             </Link>
 
             <div className="flex items-center gap-2 bg-secondary/80 border border-border px-3 py-1.5 rounded-2xl">

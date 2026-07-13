@@ -56,6 +56,7 @@ function ChatContent() {
   const { user, logout } = useAuth();
   const searchParams = useSearchParams();
   const docParam = searchParams.get("doc");
+  const queryParam = searchParams.get("query") || searchParams.get("q");
 
   const [activeDocument, setActiveDocument] = useState<string>(
     docParam || "Machine_Learning_Bab2.pdf"
@@ -121,20 +122,22 @@ Anda dapat mengajukan pertanyaan apa saja mengenai bab ini, meminta ringkasan, a
     }
   }, [docParam]);
 
-  const handleSendMessage = async (textToSend?: string) => {
-    const query = textToSend || inputQuery;
-    if (!query.trim() || isLoading) return;
+  const handleSendMessage = async (textToSend?: any) => {
+    const query = typeof textToSend === "string" ? textToSend : inputQuery;
+    if (!query || !query.trim() || isLoading) return;
 
     const userMsg: MessageItem = {
       id: `msg-user-${Date.now()}`,
       role: "user",
-      content: query,
+      content: query.trim(),
       timestamp: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
     };
 
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
-    if (!textToSend) setInputQuery("");
+    if (typeof textToSend !== "string") {
+      setInputQuery("");
+    }
     setIsLoading(true);
 
     try {
@@ -178,7 +181,7 @@ Anda dapat mengajukan pertanyaan apa saja mengenai bab ini, meminta ringkasan, a
         {
           id: `msg-network-err-${Date.now()}`,
           role: "assistant",
-          content: "⚠️ **Koneksi Terputus**: Tidak dapat terhubung ke server '/api/chat'. Silakan periksa jaringan Anda.",
+          content: "❌ **Kesalahan Jaringan**: Tidak dapat terhubung ke server RAG API Arnai (`/api/chat`). Silakan periksa koneksi internet atau coba lagi beberapa saat.",
           timestamp: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
         },
       ]);
@@ -186,6 +189,15 @@ Anda dapat mengajukan pertanyaan apa saja mengenai bab ini, meminta ringkasan, a
       setIsLoading(false);
     }
   };
+
+  // Auto trigger initial query if present in URL
+  const initialQueryExecuted = useRef(false);
+  useEffect(() => {
+    if (queryParam && !initialQueryExecuted.current) {
+      initialQueryExecuted.current = true;
+      handleSendMessage(queryParam);
+    }
+  }, [queryParam]);
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -212,7 +224,7 @@ Anda dapat mengajukan pertanyaan apa saja mengenai bab ini, meminta ringkasan, a
               href="/documents"
               className="px-3.5 py-1.5 rounded-xl border border-border bg-card hover:bg-secondary text-xs font-bold transition-colors flex items-center gap-1.5"
             >
-              Unggah Materi (`/documents`)
+              📄 Unggah Materi
             </Link>
 
             <div className="flex items-center gap-2 bg-secondary/80 border border-border px-3 py-1.5 rounded-2xl">

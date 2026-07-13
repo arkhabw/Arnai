@@ -38,6 +38,9 @@ function PomodoroContent() {
   // Active task state
   const [activeTask, setActiveTask] = useState<string>("Mempelajari & membedah Bab 2.3: Gradient Descent");
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const oscillatorRef = useRef<OscillatorNode | null>(null);
+  const gainNodeRef = useRef<GainNode | null>(null);
 
   const currentUser = user || {
     id: "usr-guest",
@@ -61,6 +64,63 @@ function PomodoroContent() {
     setMode(newMode);
     setTimeLeft(durations[newMode]);
   };
+
+  // Web Audio API Ambient Binaural Beats Generator
+  useEffect(() => {
+    if (isActive && soundEnabled && typeof window !== "undefined") {
+      try {
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (!audioCtxRef.current) {
+          audioCtxRef.current = new AudioContextClass();
+        }
+        const ctx = audioCtxRef.current;
+        if (ctx.state === "suspended") {
+          ctx.resume();
+        }
+
+        if (!oscillatorRef.current) {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(196, ctx.currentTime); // 196 Hz Soothing Solfeggio / Binaural Root Frequency
+          gain.gain.setValueAtTime(0.04, ctx.currentTime); // Very gentle ambient hum
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+
+          oscillatorRef.current = osc;
+          gainNodeRef.current = gain;
+        }
+      } catch (e) {
+        console.error("Web Audio API not supported or blocked:", e);
+      }
+    } else {
+      if (oscillatorRef.current) {
+        try {
+          oscillatorRef.current.stop();
+          oscillatorRef.current.disconnect();
+        } catch (e) {}
+        oscillatorRef.current = null;
+      }
+      if (audioCtxRef.current && audioCtxRef.current.state !== "closed") {
+        try {
+          audioCtxRef.current.suspend();
+        } catch (e) {}
+      }
+    }
+
+    return () => {
+      if (oscillatorRef.current) {
+        try {
+          oscillatorRef.current.stop();
+          oscillatorRef.current.disconnect();
+        } catch (e) {}
+        oscillatorRef.current = null;
+      }
+    };
+  }, [isActive, soundEnabled]);
 
   useEffect(() => {
     if (isActive && timeLeft > 0) {
@@ -132,7 +192,7 @@ function PomodoroContent() {
               href="/chat"
               className="px-3.5 py-1.5 rounded-xl border border-border bg-card hover:bg-secondary text-xs font-bold transition-colors flex items-center gap-1.5"
             >
-              Buka AI Chat (`/chat`)
+              💬 Buka AI Chat
             </Link>
 
             <div className="flex items-center gap-2 bg-secondary/80 border border-border px-3 py-1.5 rounded-2xl">
@@ -318,14 +378,14 @@ function PomodoroContent() {
                 <option value="Mempelajari & membedah Bab 2.3: Gradient Descent">
                   📑 Mempelajari & membedah Bab 2.3: Gradient Descent
                 </option>
-                <option value="Mengerjakan 12 Kartu SRS di Flashcards (/study/flashcards)">
-                  🃏 Mengerjakan 12 Kartu SRS di Flashcards (`/study/flashcards`)
+                <option value="Mengerjakan 12 Kartu SRS di Flashcards">
+                  🃏 Mengerjakan 12 Kartu SRS di Flashcards
                 </option>
-                <option value="Latihan Kuis UTS Machine Learning (/study/quizzes)">
-                  ⚡ Latihan Kuis UTS Machine Learning (`/study/quizzes`)
+                <option value="Latihan Kuis UTS Machine Learning">
+                  ⚡ Latihan Kuis UTS Machine Learning
                 </option>
-                <option value="Eksplorasi Peta Konsep Mindmap (/study/mindmaps)">
-                  🧠 Eksplorasi Peta Konsep Mindmap (`/study/mindmaps`)
+                <option value="Eksplorasi Peta Konsep Mindmap">
+                  🧠 Eksplorasi Peta Konsep Mindmap
                 </option>
               </select>
             </div>

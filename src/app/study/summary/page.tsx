@@ -196,7 +196,7 @@ export default function SummaryPage() {
               href="/chat"
               className="px-3.5 py-1.5 rounded-xl border border-border bg-card hover:bg-secondary text-xs font-bold transition-colors flex items-center gap-1.5"
             >
-              Buka AI Chat (`/chat`)
+              💬 Buka AI Chat
             </Link>
 
             <div className="flex items-center gap-2 bg-secondary/80 border border-border px-3 py-1.5 rounded-2xl">
@@ -276,13 +276,13 @@ export default function SummaryPage() {
               href="/study/summary"
               className="px-4 py-2 rounded-xl bg-primary text-primary-foreground font-extrabold text-xs shadow-sm flex items-center gap-2"
             >
-              <BookOpen className="w-4 h-4" /> Ringkasan Per Bab (`/study/summary`)
+              <BookOpen className="w-4 h-4" /> Ringkasan Per Bab
             </Link>
             <Link
               href="/study/highlights"
               className="px-4 py-2 rounded-xl bg-secondary/80 hover:bg-secondary text-muted-foreground hover:text-foreground font-extrabold text-xs transition-colors flex items-center gap-2 border border-border"
             >
-              <Sparkles className="w-4 h-4 text-amber-400" /> Color-Coded Highlights (`/study/highlights`)
+              <Sparkles className="w-4 h-4 text-amber-400" /> Color-Coded Highlights
             </Link>
           </div>
 
@@ -303,7 +303,7 @@ export default function SummaryPage() {
                     className="p-6 cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-secondary/30 transition-colors"
                   >
                     <div className="flex items-start sm:items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0 font-black text-sm border border-primary/20">
+                      <div className="min-w-[76px] h-12 px-3 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0 font-black text-xs sm:text-sm border border-primary/20 whitespace-nowrap text-center shadow-inner">
                         {chap.chapterNumber}
                       </div>
                       <div>

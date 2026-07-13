@@ -34,79 +34,227 @@ interface LeaderboardUser {
   isCurrentUser?: boolean;
 }
 
-const initialLeaderboard: LeaderboardUser[] = [
-  {
-    rank: 1,
-    name: "Arka Bayu (Top Global)",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Arka",
-    xp: 2850,
-    level: "Level 6 • Grand RAG Tactician",
-    streak: 14,
-    badgesCount: 12,
-    quizAccuracy: "98%",
-  },
-  {
-    rank: 2,
-    name: "Sarah Jenkins",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-    xp: 2410,
-    level: "Level 5 • RAG Specialist",
-    streak: 11,
-    badgesCount: 10,
-    quizAccuracy: "96%",
-  },
-  {
-    rank: 3,
-    name: "David Chen",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
-    xp: 2190,
-    level: "Level 5 • RAG Specialist",
-    streak: 9,
-    badgesCount: 9,
-    quizAccuracy: "94%",
-  },
-  {
-    rank: 4,
-    name: "Anda (Pelajar Aktif)",
-    avatar: "",
-    xp: 1450,
-    level: "Level 4 • AI Master Scholar",
-    streak: 7,
-    badgesCount: 4,
-    quizAccuracy: "90%",
-    isCurrentUser: true,
-  },
-  {
-    rank: 5,
-    name: "Budi Santoso",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi",
-    xp: 1320,
-    level: "Level 3 • Deep Learner",
-    streak: 5,
-    badgesCount: 4,
-    quizAccuracy: "88%",
-  },
-  {
-    rank: 6,
-    name: "Elena Rostova",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
-    xp: 1180,
-    level: "Level 3 • Deep Learner",
-    streak: 4,
-    badgesCount: 3,
-    quizAccuracy: "85%",
-  },
-  {
-    rank: 7,
-    name: "Ahmad Zaky",
-    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zaky",
-    xp: 980,
-    level: "Level 2 • Novice Scholar",
-    streak: 3,
-    badgesCount: 2,
-    quizAccuracy: "82%",
-  },
-];
+const leaderboardDataMap: Record<"weekly" | "monthly" | "allTime", LeaderboardUser[]> = {
+  weekly: [
+    {
+      rank: 1,
+      name: "Sarah Jenkins",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+      xp: 480,
+      level: "Level 5 • RAG Specialist",
+      streak: 7,
+      badgesCount: 10,
+      quizAccuracy: "98%",
+    },
+    {
+      rank: 2,
+      name: "Anda (Pelajar Aktif)",
+      avatar: "",
+      xp: 450,
+      level: "Level 4 • AI Master Scholar",
+      streak: 7,
+      badgesCount: 4,
+      quizAccuracy: "96%",
+      isCurrentUser: true,
+    },
+    {
+      rank: 3,
+      name: "Arka Bayu (Top Global)",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Arka",
+      xp: 420,
+      level: "Level 6 • Grand RAG Tactician",
+      streak: 6,
+      badgesCount: 12,
+      quizAccuracy: "94%",
+    },
+    {
+      rank: 4,
+      name: "David Chen",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
+      xp: 390,
+      level: "Level 5 • RAG Specialist",
+      streak: 5,
+      badgesCount: 9,
+      quizAccuracy: "92%",
+    },
+    {
+      rank: 5,
+      name: "Budi Santoso",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi",
+      xp: 310,
+      level: "Level 3 • Deep Learner",
+      streak: 4,
+      badgesCount: 4,
+      quizAccuracy: "88%",
+    },
+    {
+      rank: 6,
+      name: "Elena Rostova",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
+      xp: 260,
+      level: "Level 3 • Deep Learner",
+      streak: 3,
+      badgesCount: 3,
+      quizAccuracy: "85%",
+    },
+    {
+      rank: 7,
+      name: "Ahmad Zaky",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zaky",
+      xp: 190,
+      level: "Level 2 • Novice Scholar",
+      streak: 2,
+      badgesCount: 2,
+      quizAccuracy: "80%",
+    },
+  ],
+  monthly: [
+    {
+      rank: 1,
+      name: "David Chen",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
+      xp: 1850,
+      level: "Level 5 • RAG Specialist",
+      streak: 15,
+      badgesCount: 9,
+      quizAccuracy: "95%",
+    },
+    {
+      rank: 2,
+      name: "Arka Bayu (Top Global)",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Arka",
+      xp: 1720,
+      level: "Level 6 • Grand RAG Tactician",
+      streak: 14,
+      badgesCount: 12,
+      quizAccuracy: "96%",
+    },
+    {
+      rank: 3,
+      name: "Anda (Pelajar Aktif)",
+      avatar: "",
+      xp: 1450,
+      level: "Level 4 • AI Master Scholar",
+      streak: 12,
+      badgesCount: 4,
+      quizAccuracy: "92%",
+      isCurrentUser: true,
+    },
+    {
+      rank: 4,
+      name: "Sarah Jenkins",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+      xp: 1390,
+      level: "Level 5 • RAG Specialist",
+      streak: 11,
+      badgesCount: 10,
+      quizAccuracy: "94%",
+    },
+    {
+      rank: 5,
+      name: "Budi Santoso",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi",
+      xp: 1120,
+      level: "Level 3 • Deep Learner",
+      streak: 8,
+      badgesCount: 4,
+      quizAccuracy: "89%",
+    },
+    {
+      rank: 6,
+      name: "Elena Rostova",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
+      xp: 980,
+      level: "Level 3 • Deep Learner",
+      streak: 6,
+      badgesCount: 3,
+      quizAccuracy: "86%",
+    },
+    {
+      rank: 7,
+      name: "Ahmad Zaky",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zaky",
+      xp: 820,
+      level: "Level 2 • Novice Scholar",
+      streak: 5,
+      badgesCount: 2,
+      quizAccuracy: "83%",
+    },
+  ],
+  allTime: [
+    {
+      rank: 1,
+      name: "Arka Bayu (Top Global)",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Arka",
+      xp: 2850,
+      level: "Level 6 • Grand RAG Tactician",
+      streak: 14,
+      badgesCount: 12,
+      quizAccuracy: "98%",
+    },
+    {
+      rank: 2,
+      name: "Sarah Jenkins",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+      xp: 2410,
+      level: "Level 5 • RAG Specialist",
+      streak: 11,
+      badgesCount: 10,
+      quizAccuracy: "96%",
+    },
+    {
+      rank: 3,
+      name: "David Chen",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
+      xp: 2190,
+      level: "Level 5 • RAG Specialist",
+      streak: 9,
+      badgesCount: 9,
+      quizAccuracy: "94%",
+    },
+    {
+      rank: 4,
+      name: "Anda (Pelajar Aktif)",
+      avatar: "",
+      xp: 1450,
+      level: "Level 4 • AI Master Scholar",
+      streak: 7,
+      badgesCount: 4,
+      quizAccuracy: "90%",
+      isCurrentUser: true,
+    },
+    {
+      rank: 5,
+      name: "Budi Santoso",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Budi",
+      xp: 1320,
+      level: "Level 3 • Deep Learner",
+      streak: 5,
+      badgesCount: 4,
+      quizAccuracy: "88%",
+    },
+    {
+      rank: 6,
+      name: "Elena Rostova",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
+      xp: 1180,
+      level: "Level 3 • Deep Learner",
+      streak: 4,
+      badgesCount: 3,
+      quizAccuracy: "85%",
+    },
+    {
+      rank: 7,
+      name: "Ahmad Zaky",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zaky",
+      xp: 980,
+      level: "Level 2 • Novice Scholar",
+      streak: 3,
+      badgesCount: 2,
+      quizAccuracy: "82%",
+    },
+  ],
+};
 
 function LeaderboardContent() {
   const { user, logout } = useAuth();
@@ -122,8 +270,9 @@ function LeaderboardContent() {
     provider: "demo" as const,
   };
 
-  const topThree = initialLeaderboard.slice(0, 3);
-  const remaining = initialLeaderboard.slice(3);
+  const currentList = leaderboardDataMap[timeframe];
+  const topThree = currentList.slice(0, 3);
+  const remaining = currentList.slice(3);
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -144,7 +293,7 @@ function LeaderboardContent() {
               href="/chat"
               className="px-3.5 py-1.5 rounded-xl border border-border bg-card hover:bg-secondary text-xs font-bold transition-colors flex items-center gap-1.5"
             >
-              Buka AI Chat (`/chat`)
+              💬 Buka AI Chat
             </Link>
 
             <div className="flex items-center gap-2 bg-secondary/80 border border-border px-3 py-1.5 rounded-2xl">
@@ -340,7 +489,7 @@ function LeaderboardContent() {
           </div>
 
           <div className="flex items-center justify-between pt-2 border-t border-border/40 text-xs font-bold text-muted-foreground">
-            <span>💡 Selesaikan sesi Pomodoro (`/pomodoro`) atau 3D Flashcard (`/study/flashcards`) untuk menyalip posisi #3!</span>
+            <span>💡 Selesaikan sesi Pomodoro atau 3D Flashcard untuk menyalip posisi #3!</span>
             <Link href="/pomodoro" className="text-primary hover:underline flex items-center gap-1">
               <span>⏱️ Mulai Pomodoro Sekarang</span>
               <ArrowRight className="w-3.5 h-3.5" />

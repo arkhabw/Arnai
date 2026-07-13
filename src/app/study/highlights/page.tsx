@@ -181,7 +181,7 @@ export default function HighlightsPage() {
               href="/chat"
               className="px-3.5 py-1.5 rounded-xl border border-border bg-card hover:bg-secondary text-xs font-bold transition-colors flex items-center gap-1.5"
             >
-              Buka AI Chat (`/chat`)
+              💬 Buka AI Chat
             </Link>
 
             <div className="flex items-center gap-2 bg-secondary/80 border border-border px-3 py-1.5 rounded-2xl">
@@ -220,22 +220,30 @@ export default function HighlightsPage() {
           {/* Header Banner */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border/80 pb-6">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 font-bold text-xs mb-2 border border-amber-500/20">
-                <Sparkles className="w-3.5 h-3.5" /> Phase 6: Color-Coded Highlights
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-bold text-xs mb-2 border border-primary/20">
+                <Sparkles className="w-3.5 h-3.5" /> Phase 6: Smart Chapter Summary & Highlights
               </div>
               <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground">
-                Sorotan Materi & Poin Kunci Ujian
+                Sorotan Kunci & Poin Ujian
               </h1>
               <p className="text-xs sm:text-sm text-muted-foreground font-medium mt-1 max-w-2xl">
-                AI Arnai telah menyortir dan mewarnai kalimat paling esensial dari **Machine_Learning_Bab2.pdf**. Gunakan filter warna di bawah untuk menghafal definisi atau rumus dalam hitungan detik.
+                Sistem AI mengekstrak kalimat-kalimat paling penting dari **Machine_Learning_Bab2.pdf** dan mengklasifikasikannya berdasarkan warna prioritas kognitif.
               </p>
             </div>
 
-            {/* CTA action bar */}
-            <div className="flex items-center gap-3 self-start md:self-auto">
+            {/* Quick Action Bar */}
+            <div className="flex items-center gap-2 self-start md:self-auto">
+              <Link
+                href="/study/summary"
+                className="px-4 py-2 rounded-xl bg-secondary/80 hover:bg-secondary text-muted-foreground hover:text-foreground text-xs font-extrabold transition-all flex items-center gap-1.5 border border-border"
+              >
+                <BookOpen className="w-4 h-4" />
+                <span>Lihat Ringkasan Bab</span>
+              </Link>
+
               <Link
                 href="/study/quizzes"
-                className="px-4 py-2.5 rounded-xl bg-primary hover:bg-blue-700 text-primary-foreground text-xs font-extrabold shadow-md transition-all flex items-center gap-2 active:scale-95"
+                className="px-4 py-2 rounded-xl bg-primary hover:bg-blue-700 text-primary-foreground text-xs font-extrabold shadow-md transition-all flex items-center gap-1.5 active:scale-95"
               >
                 <HelpCircle className="w-4 h-4" />
                 <span>⚡ Uji Saya dengan Kuis dari Highlight Ini</span>
@@ -249,13 +257,13 @@ export default function HighlightsPage() {
               href="/study/summary"
               className="px-4 py-2 rounded-xl bg-secondary/80 hover:bg-secondary text-muted-foreground hover:text-foreground font-extrabold text-xs transition-colors flex items-center gap-2 border border-border"
             >
-              <BookOpen className="w-4 h-4" /> Ringkasan Per Bab (`/study/summary`)
+              <BookOpen className="w-4 h-4" /> Ringkasan Per Bab
             </Link>
             <Link
               href="/study/highlights"
               className="px-4 py-2 rounded-xl bg-primary text-primary-foreground font-extrabold text-xs shadow-sm flex items-center gap-2"
             >
-              <Sparkles className="w-4 h-4" /> Color-Coded Highlights (`/study/highlights`)
+              <Sparkles className="w-4 h-4" /> Color-Coded Highlights
             </Link>
           </div>
 
