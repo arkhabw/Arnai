@@ -41,6 +41,10 @@ export function StudyChart({ isDemo }: { isDemo: boolean }) {
   const totalQuizzes = data.reduce((acc, curr) => acc + curr.kuis, 0);
   const avgAccuracy = Math.round(data.reduce((acc, curr) => acc + curr.akurasi, 0) / data.length);
 
+  const durationImprovement = timeRange === "weekly" ? "▲ +18% dari minggu lalu" : "▲ +24% dari bulan lalu";
+  const quizzesImprovement = timeRange === "weekly" ? "▲ +12 soal AI baru minggu ini" : "▲ +45 soal AI baru bulan ini";
+  const accuracyImprovement = timeRange === "weekly" ? "▲ +5.4% dari minggu lalu" : "▲ +8.2% dari bulan lalu";
+
   return (
     <div className="glass-card rounded-3xl border border-border p-6 shadow-lg flex flex-col justify-between">
       {/* Header & Controls */}
@@ -109,7 +113,7 @@ export function StudyChart({ isDemo }: { isDemo: boolean }) {
       </div>
 
       {/* KPI Cards Row */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
         <div className="p-3.5 rounded-2xl bg-secondary/60 border border-border flex flex-col justify-between">
           <div className="flex items-center justify-between text-muted-foreground mb-1">
             <span className="text-[11px] font-bold uppercase tracking-wider">Total Durasi</span>
@@ -118,7 +122,7 @@ export function StudyChart({ isDemo }: { isDemo: boolean }) {
           <div className="text-lg sm:text-2xl font-black text-foreground">
             {totalHours} <span className="text-xs font-bold text-muted-foreground">Jam</span>
           </div>
-          <div className="text-[10px] text-emerald-500 font-bold mt-1">▲ +18% dari minggu lalu</div>
+          <div className="text-[10px] text-emerald-500 font-bold mt-1 truncate">{durationImprovement}</div>
         </div>
 
         <div className="p-3.5 rounded-2xl bg-secondary/60 border border-border flex flex-col justify-between">
@@ -129,7 +133,7 @@ export function StudyChart({ isDemo }: { isDemo: boolean }) {
           <div className="text-lg sm:text-2xl font-black text-foreground">
             {totalQuizzes} <span className="text-xs font-bold text-muted-foreground">Soal</span>
           </div>
-          <div className="text-[10px] text-emerald-500 font-bold mt-1">▲ +12 soal AI baru</div>
+          <div className="text-[10px] text-emerald-500 font-bold mt-1 truncate">{quizzesImprovement}</div>
         </div>
 
         <div className="p-3.5 rounded-2xl bg-secondary/60 border border-border flex flex-col justify-between">
@@ -140,7 +144,9 @@ export function StudyChart({ isDemo }: { isDemo: boolean }) {
           <div className="text-lg sm:text-2xl font-black text-foreground">
             {avgAccuracy}<span className="text-xs font-bold text-muted-foreground">%</span>
           </div>
-          <div className="text-[10px] text-blue-400 font-bold mt-1">🎯 Akurasi Jawaban Anda</div>
+          <div className="text-[10px] text-emerald-500 font-bold mt-1 flex items-center gap-1 truncate">
+            <span>{accuracyImprovement}</span>
+          </div>
         </div>
       </div>
 
