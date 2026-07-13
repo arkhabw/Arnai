@@ -16,6 +16,7 @@ import {
   ArrowRight,
   Zap,
   Network,
+  Trophy,
 } from "lucide-react";
 
 const navItems = [
@@ -27,6 +28,8 @@ const navItems = [
   { name: "AI Quiz Generator", href: "/study/quizzes", icon: HelpCircle, badge: "Phase 8" },
   { name: "Interactive Mindmap", href: "/study/mindmaps", icon: Network, badge: "Phase 9" },
   { name: "Pomodoro Focus Timer", href: "/pomodoro", icon: Clock, badge: "Phase 10" },
+  { name: "Pencapaian & Lencana", href: "/achievements", icon: Award, badge: "Phase 10" },
+  { name: "Klasemen Pelajar", href: "/leaderboard", icon: Trophy, badge: "Phase 10" },
 ];
 
 export function DashboardSidebar() {
