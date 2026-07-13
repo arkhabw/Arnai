@@ -134,13 +134,13 @@ export function StudyChart({ isDemo }: { isDemo: boolean }) {
 
         <div className="p-3.5 rounded-2xl bg-secondary/60 border border-border flex flex-col justify-between">
           <div className="flex items-center justify-between text-muted-foreground mb-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider">Rata-rata Akurasi</span>
+            <span className="text-[11px] font-bold uppercase tracking-wider">Rata-rata Skor Kuis</span>
             <Sparkles className="w-4 h-4 text-amber-400" />
           </div>
           <div className="text-lg sm:text-2xl font-black text-foreground">
             {avgAccuracy}<span className="text-xs font-bold text-muted-foreground">%</span>
           </div>
-          <div className="text-[10px] text-blue-400 font-bold mt-1">✨ Pemahaman RAG Tinggi</div>
+          <div className="text-[10px] text-blue-400 font-bold mt-1">🎯 Akurasi Jawaban Anda</div>
         </div>
       </div>
 
