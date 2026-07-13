@@ -69,6 +69,11 @@ export default function DashboardPage() {
                 )}
               </div>
               <span className="text-xs font-bold">{currentUser.name}</span>
+              {currentUser.provider === "google" && (
+                <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-[10px] font-extrabold flex items-center gap-1">
+                  ✓ Google
+                </span>
+              )}
               {currentUser.isDemo && (
                 <span className="px-1.5 py-0.5 rounded bg-blue-500/10 text-primary border border-primary/20 text-[10px] font-extrabold">
                   ⚡ Seed Demo
@@ -113,7 +118,11 @@ export default function DashboardPage() {
               Halo, <span className="text-primary">{currentUser.name}</span> 👋
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground font-medium max-w-2xl">
-              {currentUser.isDemo ? (
+              {currentUser.provider === "google" ? (
+                <span>
+                  Anda masuk melalui akun <strong>Google OAuth Terverifikasi ({currentUser.email})</strong>. Akun Anda siap digunakan di seluruh layanan Arnai.
+                </span>
+              ) : currentUser.isDemo ? (
                 <span>
                   Anda sedang dalam <strong>Quick Demo Mode (Akun Arkha B. W.)</strong>. Sistem telah memuat 2 dokumen seed kuliah Anda beserta statistik kemajuan belajar.
                 </span>

@@ -10,6 +10,7 @@ export interface UserProfile {
   avatar: string;
   role: string;
   isDemo: boolean;
+  provider?: "email" | "google" | "demo";
   streakDays: number;
   completedQuizzes: number;
   masteredFlashcards: number;
@@ -20,6 +21,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password?: string) => Promise<boolean>;
   register: (name: string, email: string, password?: string) => Promise<boolean>;
+  loginWithGoogle: () => Promise<boolean>;
   loginAsQuickDemo: () => Promise<void>;
   logout: () => void;
 }
@@ -31,9 +33,23 @@ const DEMO_USER: UserProfile = {
   avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
   role: "Pro Student Account",
   isDemo: true,
+  provider: "demo",
   streakDays: 7,
   completedQuizzes: 14,
   masteredFlashcards: 68,
+};
+
+const GOOGLE_USER: UserProfile = {
+  id: "usr-google-arkha",
+  name: "Arkha B. W.",
+  email: "arkhabw@gmail.com",
+  avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+  role: "Pro Google Account",
+  isDemo: false,
+  provider: "google",
+  streakDays: 3,
+  completedQuizzes: 5,
+  masteredFlashcards: 24,
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -85,6 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
       role: "Student Account",
       isDemo: false,
+      provider: "email",
       streakDays: 1,
       completedQuizzes: 0,
       masteredFlashcards: 0,
@@ -106,12 +123,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       avatar: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&auto=format&fit=crop&q=80",
       role: "Student Account",
       isDemo: false,
+      provider: "email",
       streakDays: 1,
       completedQuizzes: 0,
       masteredFlashcards: 0,
     };
 
     persistUser(newUser);
+    setIsLoading(false);
+    return true;
+  };
+
+  const loginWithGoogle = async (): Promise<boolean> => {
+    setIsLoading(true);
+    // Simulate Google OAuth handshake
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    persistUser(GOOGLE_USER);
     setIsLoading(false);
     return true;
   };
@@ -136,6 +163,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isLoading,
         login,
         register,
+        loginWithGoogle,
         loginAsQuickDemo,
         logout,
       }}

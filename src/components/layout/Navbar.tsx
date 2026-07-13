@@ -113,8 +113,10 @@ export function Navbar() {
                 </div>
                 <div className="flex flex-col text-left">
                   <span className="text-xs font-bold text-foreground leading-none">{user.name}</span>
-                  <span className="text-[10px] text-muted-foreground font-medium mt-0.5">
-                    {user.isDemo ? "⚡ Seed Demo" : "Student"}
+                  <span className="text-[10px] text-muted-foreground font-medium mt-0.5 flex items-center gap-1">
+                    {user.provider === "google" && <span className="text-emerald-500 font-bold">✓ Google</span>}
+                    {user.isDemo && "⚡ Seed Demo"}
+                    {!user.isDemo && user.provider !== "google" && "Student"}
                   </span>
                 </div>
               </div>
@@ -220,8 +222,9 @@ export function Navbar() {
                       </div>
                       <div className="flex flex-col">
                         <span className="text-xs font-bold text-foreground">{user.name}</span>
-                        <span className="text-[10px] text-muted-foreground font-medium">
-                          {user.email}
+                        <span className="text-[10px] text-muted-foreground font-medium flex items-center gap-1">
+                          {user.provider === "google" && <span className="text-emerald-500 font-bold">✓ Google</span>}
+                          <span>{user.email}</span>
                         </span>
                       </div>
                     </div>
