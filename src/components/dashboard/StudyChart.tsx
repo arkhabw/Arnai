@@ -25,10 +25,10 @@ const weeklyData = [
 ];
 
 const monthlyData = [
-  { day: "Mgg 1", menit: 280, kuis: 22, akurasi: 84 },
-  { day: "Mgg 2", menit: 350, kuis: 30, akurasi: 87 },
-  { day: "Mgg 3", menit: 410, kuis: 35, akurasi: 91 },
-  { day: "Mgg 4", menit: 505, kuis: 41, akurasi: 93 },
+  { day: "Minggu 1", menit: 280, kuis: 22, akurasi: 84 },
+  { day: "Minggu 2", menit: 350, kuis: 30, akurasi: 87 },
+  { day: "Minggu 3", menit: 410, kuis: 35, akurasi: 91 },
+  { day: "Minggu 4", menit: 505, kuis: 41, akurasi: 93 },
 ];
 
 export function StudyChart({ isDemo }: { isDemo: boolean }) {
