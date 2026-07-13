@@ -43,6 +43,7 @@ interface MessageItem {
     snippet: string;
   }[];
   engineUsed?: string;
+  suggestedFollowUps?: string[];
 }
 
 const initialSuggestions = [
@@ -162,6 +163,7 @@ Anda dapat mengajukan pertanyaan apa saja mengenai bab ini, meminta ringkasan, a
           timestamp: new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }),
           citations: result.citations || [],
           engineUsed: result.engineUsed || "Arnai RAG Engine",
+          suggestedFollowUps: result.suggestedFollowUps || [],
         };
         setMessages((prev) => [...prev, assistantMsg]);
       } else {
@@ -390,6 +392,27 @@ Anda dapat mengajukan pertanyaan apa saja mengenai bab ini, meminta ringkasan, a
                               "{cite.snippet}"
                             </div>
                           </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Suggested Follow-Ups */}
+                  {msg.role === "assistant" && msg.suggestedFollowUps && msg.suggestedFollowUps.length > 0 && (
+                    <div className="mt-4 pt-3 border-t border-border/80">
+                      <div className="text-[10px] font-extrabold uppercase tracking-wider text-primary mb-2 flex items-center gap-1">
+                        ✨ Pertanyaan Lanjutan:
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {msg.suggestedFollowUps.map((followUp, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => handleSendMessage(followUp)}
+                            disabled={isLoading}
+                            className="text-left px-3 py-1.5 rounded-xl bg-secondary/80 hover:bg-primary hover:text-primary-foreground border border-border text-xs font-semibold text-muted-foreground hover:border-primary transition-all active:scale-95"
+                          >
+                            💬 {followUp}
+                          </button>
                         ))}
                       </div>
                     </div>

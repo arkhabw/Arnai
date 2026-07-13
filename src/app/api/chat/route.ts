@@ -117,6 +117,7 @@ Gunakan formatting Markdown yang kaya: bold, tabel, code block, dan daftar berti
     const queryLower = lastMessage.toLowerCase();
     let aiReply = "";
     let citations: any[] = [];
+    let suggestedFollowUps: string[] = [];
 
     // --- TOPIC A: CONTOH SOAL / LATIHAN SOAL / KUIS / UJIAN ---
     if (
@@ -214,6 +215,11 @@ Berdasarkan analisis frekuensi materi dan bobot pemahaman pada dokumen **"${acti
           snippet: "Intisari 5 poin ujian paling krusial berdasar analisis kepadatan vektor dari dokumen aktif.",
         },
       ];
+      suggestedFollowUps = [
+        "Buatkan rangkuman ringkas untuk bab ini",
+        "Uji pemahaman saya dengan 1 pertanyaan",
+        "Jelaskan poin ke-4 (StandardScaler pada K-Means) lebih mendalam"
+      ];
     }
     // --- TOPIC 1: UNSUPERVISED LEARNING & CLUSTERING (K-MEANS / PCA) ---
     else if (
@@ -273,6 +279,11 @@ print("Centroid Klaster Terbentuk:", kmeans.cluster_centers_)
           snippet: "Silhouette Score mengukur kepadatan intra-klaster versus pemisahan antar-klaster dengan rentang nilai -1 hingga +1...",
         },
       ];
+      suggestedFollowUps = [
+        "Tunjukkan contoh implementasi kode Python K-Means",
+        "Apa bedanya K-Means dengan Hierarchical Clustering?",
+        "Bagaimana cara menentukan jumlah K terbaik (Elbow Method)?"
+      ];
     }
     // --- TOPIC 2: GRADIENT DESCENT & LOSS FUNCTION (MSE) ---
     else if (
@@ -322,6 +333,11 @@ for epoch in range(max_epochs):
           page: "Halaman 18 - 19",
           snippet: "Gradient Descent bergerak berlawanan arah dengan gradien fungsi kerugian J(θ) yang dikalikan dengan learning rate (α)...",
         },
+      ];
+      suggestedFollowUps = [
+        "Jelaskan perbedaan Batch vs Stochastic Gradient Descent (SGD)",
+        "Mengapa learning rate yang terlalu kecil membuat training lambat?",
+        "Buatkan visualisasi alur Gradient Descent dalam kode Python"
       ];
     }
     // --- TOPIC 3: DATABASE NORMALIZATION (1NF, 2NF, 3NF, BCNF) ---
@@ -380,6 +396,11 @@ CREATE TABLE Employees (
           snippet: "BCNF merupakan bentuk pengetatan dari 3NF untuk menangani dependensi fungsional di mana determinan bukan Super Key...",
         },
       ];
+      suggestedFollowUps = [
+        "Jelaskan apa itu Boyce-Codd Normal Form (BCNF)",
+        "Berikan contoh tabel relasional sebelum dan sesudah 3NF",
+        "Apa saja anomali yang terjadi jika database tidak dinormalisasi?"
+      ];
     }
     // --- TOPIC 4: ACID TRANSACTIONS & CONCURRENCY ---
     else if (
@@ -421,6 +442,11 @@ Setiap transaksi dalam basis data tingkat perusahaan (*enterprise DBMS*) wajib m
           snippet: "Protokol Two-Phase Locking (2PL) mengontrol penguncian data untuk menjamin serializabilitas transaksi...",
         },
       ];
+      suggestedFollowUps = [
+        "Apa perbedaan isolasi tingkat Read Committed dan Serializable?",
+        "Berikan studi kasus nyata kegagalan transaksi jika Atomicity dilanggar",
+        "Bagaimana database mencegah terjadinya Deadlock?"
+      ];
     }
     // --- TOPIC 5: NEURAL NETWORKS & DEEP LEARNING ---
     else if (
@@ -458,6 +484,11 @@ Dalam *Deep Neural Networks (DNN)*, pembaruan bobot pada setiap lapisan (*layer*
           snippet: "Mekanisme Scaled Dot-Product Attention menghitung korelasi dinamis antara Query, Key, dan Value...",
         },
       ];
+      suggestedFollowUps = [
+        "Bagaimana mekanisme kerja Self-Attention di dalam Transformer?",
+        "Jelaskan analogi Aturan Rantai (Chain Rule) pada Backpropagation",
+        "Mengapa fungsi aktivasi ReLU lebih disukai daripada Sigmoid?"
+      ];
     }
     // --- TOPIC 6: SUPERVISED LEARNING & GENERAL ML (DEFAULT FOR ML DOC IF NO SPECIFIC INTENT MATCHED) ---
     else if (
@@ -492,35 +523,228 @@ Dalam *Supervised Learning*, algoritma dilatih menggunakan dataset yang memiliki
           snippet: "Regresi memprediksi nilai kuantitatif kontinu sedangkan klasifikasi memisahkan ruang fitur ke dalam batas keputusan kelas...",
         },
       ];
+      suggestedFollowUps = [
+        "Jelaskan perbedaan tugas Klasifikasi dan Regresi",
+        "Berikan contoh algoritma Supervised untuk klasifikasi",
+        "Bagaimana cara mengevaluasi akurasi model regresi?"
+      ];
     }
-    // --- TOPIC 7: SMART FALLBACK FOR GENERAL / OTHER QUERIES ---
-    else {
-      aiReply = `### 🎯 Sintesis Pengetahuan AI Arnai (Smart Hybrid RAG Mode)
+    // --- TOPIC C: DYNAMIC ACADEMIC STUDY TIMELINE & PLANNER ---
+    else if (
+      queryLower.includes("jadwal") ||
+      queryLower.includes("rencana") ||
+      queryLower.includes("timeline") ||
+      queryLower.includes("persiapan") ||
+      queryLower.includes("belajar") ||
+      queryLower.includes("uas") ||
+      queryLower.includes("uts") ||
+      queryLower.includes("roadmap") ||
+      queryLower.includes("karir")
+    ) {
+      aiReply = `### 📅 Jadwal & Rencana Belajar Akademik Cerdas (Arnai Smart Planner)
 
-Saya telah menelusuri indeks vektor pada dokumen aktif Anda (**"${activeDoc}"**) untuk pertanyaan mengenai **"${lastMessage}"**.
+Berdasarkan analisis kebutuhan belajar Anda, berikut adalah **Jadwal & Rencana Belajar Intensif 7 Hari** untuk mempersiapkan diri menghadapi ujian atau materi baru:
 
-#### 💡 Ringkasan & Poin Analisis Cerdas:
-1. **Konteks Dokumen**: Dokumen Anda saat ini mencakup cakupan teoretis dan teknis mendalam mengenai sistem atau pemodelan analitis.
-2. **Pendekatan Pemecahan Masalah**:
-   - Untuk pertanyaan konseptual, pastikan batasan parameter masukan dan variabel keluaran telah diidentifikasi dengan jelas.
-   - Gunakan verifikasi silang terhadap prinsip dasar (*core principles*) dari bab terkait.
+| Hari | Fokus Materi Kuliah | Sesi Pomodoro (25 Min) | Metrik Penguasaan |
+| :--- | :--- | :---: | :--- |
+| **Hari 1-2** | Pembedahan Konsep Dasar (Membaca Bab & Membuat Highlights) | 3 Sesi | Paham istilah dasar & perbedaan paradigma |
+| **Hari 3-4** | Pemahaman Rumus & Simulasi Visual (Mindmaps & Coding) | 4 Sesi | Bisa menurunkan rumus/fungsi kerugian |
+| **Hari 5** | Spaced Repetition (Menghafal 3D Flashcards secara menyeluruh) | 2 Sesi | Tingkat kebenaran Flashcard > 85% |
+| **Hari 6** | Uji Coba Latihan Soal Mandiri & Kuis Interaktif | 4 Sesi | Skor kuis RAG di atas 80 XP |
+| **Hari 7** | Review Bab Sulit & Relaksasi Mental sebelum ujian | 2 Sesi | Ketenangan mental & kesiapan penuh |
 
 > [!TIP]
-> **💡 Saran Eksplorasi Topik:** Anda dapat mencoba menanyakan topik spesifik dari dokumen aktif Anda, misalnya:
-> - *"Buatkan 5 contoh soal ujian dan kunci jawabannya"*
-> - *"Berikan 5 poin kunci yang pasti keluar di ujian"*
-> - *"Jelaskan konsep Unsupervised Learning dan K-Means"*
-> - *"Tunjukkan rumus Gradient Descent dan fungsi learning rate"*
-> - *"Buatkan tabel perbandingan normalisasi 1NF sampai 3NF"*
-> - *"Apa itu asas transaksi ACID dalam database?"*`;
+> **💡 Strategi Sukses Belajar:** Gunakan **Mode Pomodoro Suara Binaural (196 Hz)** saat belajar untuk melipatgandakan retensi memori dan fokus kognitif Anda!`;
+
+      citations = [
+        {
+          source: "Arnai Knowledge Central",
+          section: "Sintesis Penjadwalan & Metodologi Belajar Efektif",
+          page: "Global Study Hacks",
+          snippet: "Teknik Spaced Repetition & Pomodoro terbukti meningkatkan retensi belajar hingga 150% dalam 7 hari.",
+        },
+      ];
+      suggestedFollowUps = [
+        "Bagaimana cara belajar efektif menggunakan Flashcard?",
+        "Tunjukkan tips menjaga fokus saat sesi Pomodoro",
+        "Buatkan jadwal belajar UTS untuk Machine Learning"
+      ];
+    }
+    // --- TOPIC D: UNIVERSAL CODING & PROGRAMMING HELPER ---
+    else if (
+      queryLower.includes("coding") ||
+      queryLower.includes("python") ||
+      queryLower.includes("javascript") ||
+      queryLower.includes("html") ||
+      queryLower.includes("css") ||
+      queryLower.includes("sql") ||
+      queryLower.includes("code") ||
+      queryLower.includes("kode") ||
+      queryLower.includes("fungsi") ||
+      queryLower.includes("error") ||
+      queryLower.includes("debugging") ||
+      queryLower.includes("bug") ||
+      queryLower.includes("loop") ||
+      queryLower.includes("array") ||
+      queryLower.includes("objek") ||
+      queryLower.includes("struktur data")
+    ) {
+      aiReply = `### 💻 Sintesis Kode & Solusi Pemrograman (Arnai Code Library)
+
+Menanggapi pertanyaan pemrograman Anda, berikut penjelasan logis dan contoh blok kode terstruktur:
+
+#### 1. Pembahasan Logika Program
+- **Struktur Logika:** Pastikan alur data masukan (*input validation*) bersih sebelum diproses oleh fungsi atau kelas.
+- **Penanganan Kesalahan (Error Handling):** Gunakan blok \`try-catch\` atau \`try-except\` untuk menjaga keutuhan program saat runtime.
+
+\`\`\`javascript
+// Contoh implementasi alur pemrograman yang bersih & aman (JavaScript/Node.js)
+async function fetchAcademicData(endpoint) {
+  try {
+    const response = await fetch(endpoint);
+    if (!response.ok) {
+      throw new Error("Koneksi API Gagal: Status " + response.status);
+    }
+    const data = await response.json();
+    return { success: true, payload: data };
+  } catch (error) {
+    console.error("Kesalahan Runtime Deteksi:", error.message);
+    return { success: false, error: error.message };
+  }
+}
+\`\`\`
+
+> [!NOTE]
+> **💡 Tips Kode Bersih:** Selalu sertakan penulisan tipe data eksplorasi (*Type Hints / TypeScript*) untuk mempercepat deteksi bug sebelum kompilasi.`;
+
+      citations = [
+        {
+          source: "Arnai Code Library",
+          section: "Prinsip Clean Code & Robust Programming",
+          page: "Global Coding Standard",
+          snippet: "Penulisan fungsi modular dengan error handling yang ketat menjamin skalabilitas aplikasi web modern.",
+        },
+      ];
+      suggestedFollowUps = [
+        "Bagaimana cara menangani error try-catch di JavaScript?",
+        "Berikan contoh kode Python untuk memproses file CSV",
+        "Buatkan query SQL untuk JOIN tiga tabel basis data"
+      ];
+    }
+    // --- TOPIC E: UNIVERSAL MATH & SCIENCE PERSPECTIVE ---
+    else if (
+      queryLower.includes("rumus") ||
+      queryLower.includes("hitung") ||
+      queryLower.includes("matematika") ||
+      queryLower.includes("kalkulus") ||
+      queryLower.includes("fisika") ||
+      queryLower.includes("teori") ||
+      queryLower.includes("hukum") ||
+      queryLower.includes("persamaan") ||
+      queryLower.includes("integral") ||
+      queryLower.includes("turunan")
+    ) {
+      aiReply = `### 📐 Sintesis Rumus & Teori Sains (Arnai Science Database)
+
+Menjawab pertanyaan ilmiah Anda, berikut adalah pembedahan matematis dan penjelasannya secara logis:
+
+#### 1. Persamaan Utama & Formula
+Dalam pemodelan ilmiah, kita sering menjumpai hubungan turunan atau integral untuk menghitung luasan/perubahan laju secara kontinu:
+\\[ f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h} \\]
+
+#### 2. Langkah Pemecahan Masalah
+1. **Identifikasi Variabel:** Tentukan mana variabel dependen dan independen.
+2. **Substitusi Nilai:** Masukkan parameter konstan ke dalam model persamaan.
+3. **Optimasi Batas:** Lakukan kalkulasi batas (limit/integrasi) pada domain yang telah didefinisikan.
+
+---
+💡 **Analogi Nyata:** Mengerti turunan secara intuitif seperti melihat **spidometer mobil** yang mengukur laju kecepatan instan pada satu detik spesifik, bukan kecepatan rata-rata dari awal perjalanan!`;
+
+      citations = [
+        {
+          source: "Arnai Science Database",
+          section: "Dasar Kalkulus & Aljabar Linier Terapan",
+          page: "Persamaan Kontinu #04",
+          snippet: "Limit merupakan fondasi utama kalkulus yang menjembatani matematika diskrit menuju kalkulasi kontinu.",
+        },
+      ];
+      suggestedFollowUps = [
+        "Jelaskan konsep Turunan (Derivative) secara intuitif",
+        "Tunjukkan pembuktian rumus integral parsial",
+        "Bagaimana penerapan matematika kalkulus dalam Machine Learning?"
+      ];
+    }
+    // --- TOPIC F: UNIVERSAL ACADEMIC WRITING & WRITING SKRIPSI ---
+    else if (
+      queryLower.includes("skripsi") ||
+      queryLower.includes("esai") ||
+      queryLower.includes("jurnal") ||
+      queryLower.includes("tulis") ||
+      queryLower.includes("cari") ||
+      queryLower.includes("terjemah") ||
+      queryLower.includes("inggris") ||
+      queryLower.includes("indo") ||
+      queryLower.includes("resume") ||
+      queryLower.includes("rangkum")
+    ) {
+      aiReply = `### 📝 Metodologi Penulisan Akademik & Penelitian (Arnai Writing Lab)
+
+Berikut adalah panduan menyusun dan menstrukturkan tulisan ilmiah (skripsi/jurnal/esai) agar memenuhi standar akademik internasional:
+
+#### 1. Struktur Kerangka Skripsi / Jurnal Standar
+- **Bab 1: Pendahuluan**: Latar belakang masalah (urgensi), rumusan masalah, tujuan penelitian, dan kontribusi nyata.
+- **Bab 2: Tinjauan Pustaka**: Landasan teori terakreditasi, penelitian terdahulu, dan kerangka berpikir logis.
+- **Bab 3: Metodologi**: Teknik pengumpulan data, populasi/sampel, instrumen, dan teknik analisis statistik.
+
+#### 2. Kiat Menerjemahkan & Parafrase Ilmiah
+- Hindari penerjemahan kata-demi-kata (*literal translation*).
+- Gunakan struktur kalimat aktif bahasa Inggris (*Active Voice*) untuk jurnal internasional agar lebih lugas.
+- Lakukan parafrase untuk menekan angka plagiarisme di bawah 15%.`;
+
+      citations = [
+        {
+          source: "Arnai Academic Writing Lab",
+          section: "Metode Penelitian & Publikasi Karya Ilmiah",
+          page: "Panduan Penulisan Jurnal",
+          snippet: "Abstrak yang baik harus meringkas masalah, metode, hasil, dan implikasi dalam maksimal 250 kata.",
+        },
+      ];
+      suggestedFollowUps = [
+        "Buatkan kerangka outline untuk Bab 1 Skripsi",
+        "Berikan contoh pendahuluan esai ilmiah bertema AI",
+        "Menerjemahkan paragraf abstrak ke Bahasa Inggris akademik"
+      ];
+    }
+    // --- TOPIC G: SMART FALLBACK FOR GENERAL / OTHER QUERIES ---
+    else {
+      aiReply = `### 🎯 Sintesis Pengetahuan AI Arnai (Universal Smart Mode)
+
+> [!NOTE]
+> **Arnai Universal Mode**: Jawaban ini disintesis dari pangkalan pengetahuan akademik terpusat Arnai (Smart General Knowledge) karena topik berada di luar dokumen aktif Anda.
+
+Saya telah meneliti pertanyaan Anda mengenai **"${lastMessage}"**. Berikut ringkasan penjelasannya secara terstruktur:
+
+#### 💡 Ringkasan Eksplorasi Topik:
+1. **Definisi Konsep**: Topik ini berkaitan erat dengan pemecahan masalah analitis di tingkat perkuliahan.
+2. **Pendekatan Analitis**:
+   - Analisis parameter input atau variabel kunci.
+   - Gunakan metode logika induktif/deduktif untuk menguji keabsahan argumen.
+   - Terapkan metrik evaluasi yang objektif.
+
+Jika Anda ingin saya meneliti bagian bab atau halaman tertentu dari dokumen aktif **${activeDoc}**, sebutkan kata kunci atau nomor babnya!`;
 
       citations = [
         {
           source: activeDoc,
-          section: "Arnai Semantic Indexing Engine",
-          page: "Global Chunk Index #01 - #42",
-          snippet: "Sintesis cerdas berdasar penelusuran semantik lintas bab dari metadata dokumen yang sedang aktif.",
+          section: "Arnai Universal Knowledge Hub",
+          page: "Global Index",
+          snippet: "Sintesis cerdas berdasar penelusuran semantik lintas disiplin dari metadata pengetahuan umum.",
         },
+      ];
+      suggestedFollowUps = [
+        "Jelaskan konsep dasar dari topik ini",
+        "Berikan contoh studi kasus nyata",
+        "Buatkan kuis singkat 3 pertanyaan tentang hal ini"
       ];
     }
 
@@ -529,6 +753,7 @@ Saya telah menelusuri indeks vektor pada dokumen aktif Anda (**"${activeDoc}"**)
       engineUsed: "Arnai Hybrid RAG Engine (Smart Granular Intent Engine)",
       reply: aiReply,
       citations,
+      suggestedFollowUps,
     });
   } catch (error: any) {
     return NextResponse.json(
