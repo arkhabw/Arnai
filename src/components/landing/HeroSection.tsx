@@ -33,7 +33,7 @@ export function HeroSection() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary font-bold text-xs sm:text-sm mb-6 backdrop-blur-md shadow-sm"
           >
             <Sparkles className="w-4 h-4 text-primary animate-spin" style={{ animationDuration: "6s" }} />
-            <span>Notion + Quizlet + ChatGPT + Coursera dalam 1 Aplikasi</span>
+            <span>Satu Platform Cerdas untuk Membaca, Mengingat, Menguji & Menguasai Materi</span>
           </motion.div>
 
           {/* Heading */}

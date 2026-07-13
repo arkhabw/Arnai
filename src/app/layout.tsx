@@ -11,7 +11,7 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "Arnai — Learn easier with AI",
   description:
-    "Gabungan kekuatan Notion, Quizlet, ChatGPT, dan Coursera dalam satu platform AI super pintar untuk membantu memahami materi, membuat kuis, flashcard, dan melacak progres belajar Anda.",
+    "Arnai adalah platform belajar cerdas berbasis AI All-in-One. Unggah PDF, PPT, atau catatan Anda dan ubah seketika menjadi percakapan RAG akurat, kuis interaktif, flashcard 3D, serta peta konsep visual untuk penguasaan materi 10x lebih cepat.",
 };
 
 export default function RootLayout({

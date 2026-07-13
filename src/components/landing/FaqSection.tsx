@@ -8,7 +8,7 @@ const faqs = [
   {
     question: "Apa itu Arnai dan bagaimana cara kerjanya?",
     answer:
-      "Arnai adalah platform belajar cerdas berteknologi AI yang menggabungkan fitur pencatatan (Notion), flashcard (Quizlet), asisten AI pintar (ChatGPT), serta pelacakan kurikulum interaktif (Coursera). Anda cukup mengunggah materi pelajaran Anda (PDF, PPTX, DOCX, TXT, atau gambar catatan), dan AI akan memecah, mempelajari, serta siap diajak berdiskusi atau menghasilkan latihan kuis dan flashcard secara instan.",
+      "Arnai adalah platform belajar cerdas berteknologi AI All-in-One yang mengintegrasikan ruang kerja dokumen, asisten tanya jawab interaktif, pembuat latihan soal otomatis, dan pelacakan analitik dalam satu ekosistem terpadu. Anda cukup mengunggah materi pelajaran (PDF, PPTX, DOCX, TXT, atau gambar catatan), dan AI akan memproses dokumen tersebut menjadi basis pengetahuan akurat yang siap diajak berdiskusi, diuji lewat kuis, maupun dihafal melalui flashcard 3D.",
   },
   {
     question: "Apakah AI hanya menjawab dari dokumen yang saya unggah?",

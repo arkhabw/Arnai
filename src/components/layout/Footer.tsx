@@ -27,7 +27,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
-              Bayangkan aplikasi seperti gabungan <strong>Notion + Quizlet + ChatGPT + Coursera</strong>. Unggah materi pelajaranmu dan biarkan AI membantumu memahami materi, membuat latihan soal, dan melacak progres belajar.
+              Ubah cara Anda menguasai materi pelajaran. Unggah dokumen atau catatan kuliah, dan biarkan AI merangkum, menjawab pertanyaan dengan kutipan pasti, serta merancang kuis & flashcard interaktif secara otomatis.
             </p>
             <div className="flex items-center gap-3 pt-2">
               <a
