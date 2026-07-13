@@ -15,6 +15,7 @@ import {
   BookOpen,
   ArrowRight,
   Zap,
+  Network,
 } from "lucide-react";
 
 const navItems = [
@@ -24,6 +25,7 @@ const navItems = [
   { name: "Ringkasan & Highlight", href: "/study/summary", icon: Sparkles, badge: "Phase 6" },
   { name: "3D Flashcard & SRS", href: "/study/flashcards", icon: Layers, badge: "Phase 7" },
   { name: "AI Quiz Generator", href: "/study/quizzes", icon: HelpCircle, badge: "Phase 8" },
+  { name: "Interactive Mindmap", href: "/study/mindmaps", icon: Network, badge: "Phase 9" },
   { name: "Pomodoro Focus Timer", href: "/pomodoro", icon: Clock, badge: "Phase 10" },
 ];
 
